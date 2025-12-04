@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Course, Module, QuizQuestion } from '../types';
-import { CheckCircle, PlayCircle, FileText, HelpCircle, ChevronRight, AlertCircle } from 'lucide-react';
+import { CheckCircle, PlayCircle, FileText, HelpCircle, ChevronRight, AlertCircle, ArrowLeft, ArrowRight } from 'lucide-react';
 
 interface CourseViewProps {
   course: Course;
@@ -18,30 +18,37 @@ export const CourseView: React.FC<CourseViewProps> = ({ course, initialModuleId 
   }, [initialModuleId, course.modules]);
 
   return (
-    <div className="flex flex-col lg:flex-row gap-8 h-[calc(100vh-100px)]">
+    <div className="flex flex-col lg:flex-row gap-8 h-[calc(100vh-140px)]">
       {/* Content Area */}
-      <div className="flex-1 bg-white rounded-xl shadow-sm border border-slate-200 overflow-y-auto p-8">
+      <div className="flex-1 bg-white rounded-[24px] shadow-[0px_1px_3px_rgba(0,0,0,0.06),0px_4px_10px_rgba(0,0,0,0.04)] border border-black/5 overflow-y-auto p-8 md:p-10 relative">
         <div className="max-w-3xl mx-auto">
-          <span className="text-sm font-semibold text-indigo-600 mb-2 block uppercase tracking-wider">{course.title}</span>
-          <h1 className="text-3xl font-bold text-slate-900 mb-6">{activeModule.title}</h1>
+          <div className="flex items-center space-x-2 mb-6">
+            <span className="px-3 py-1 rounded-full bg-[#6C4CF4]/10 text-[#6C4CF4] text-xs font-bold uppercase tracking-wider">{course.title}</span>
+            <span className="text-slate-300">/</span>
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Module {course.modules.findIndex(m => m.id === activeModule.id) + 1}</span>
+          </div>
+          
+          <h1 className="text-4xl font-display font-bold text-[#1A1A1A] mb-8 leading-tight">{activeModule.title}</h1>
           
           {/* Simulated Content Rendering */}
-          <div className="prose prose-slate max-w-none mb-12">
+          <div className="prose prose-lg prose-slate max-w-none mb-12 font-light">
              {activeModule.content.split('\n').map((line, i) => {
-                 if (line.startsWith('###')) return <h3 key={i} className="text-xl font-bold mt-6 mb-3 text-slate-800">{line.replace('###', '')}</h3>;
-                 if (line.startsWith('1.')) return <div key={i} className="ml-4 mb-2 flex items-start"><span className="font-bold mr-2">{line.substring(0, 2)}</span><span>{line.substring(2)}</span></div>;
-                 if (line.startsWith('*')) return <li key={i} className="ml-4 mb-2 list-disc">{line.replace('*', '')}</li>;
+                 if (line.startsWith('###')) return <h3 key={i} className="text-2xl font-display font-bold mt-10 mb-4 text-[#1A1A1A]">{line.replace('###', '')}</h3>;
+                 if (line.startsWith('1.')) return <div key={i} className="ml-4 mb-3 flex items-start"><span className="font-bold mr-3 text-[#6C4CF4]">{line.substring(0, 2)}</span><span className="text-[#4A4A4A]">{line.substring(2)}</span></div>;
+                 if (line.startsWith('*')) return <li key={i} className="ml-6 mb-2 list-disc marker:text-[#6C4CF4] text-[#4A4A4A]">{line.replace('*', '')}</li>;
                  if (line.trim() === '') return <br key={i} />;
-                 return <p key={i} className="mb-4 text-slate-600 leading-relaxed">{line}</p>;
+                 return <p key={i} className="mb-4 text-[#4A4A4A] leading-relaxed">{line}</p>;
              })}
           </div>
 
           {/* Quiz Section */}
           {activeModule.quiz && (
-            <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-6">
-              <div className="flex items-center mb-4">
-                <HelpCircle className="text-indigo-600 mr-2" />
-                <h3 className="text-lg font-bold text-indigo-900">Knowledge Check</h3>
+            <div className="bg-[#F7F8FA] border border-black/5 rounded-[24px] p-8 mt-12">
+              <div className="flex items-center mb-6">
+                <div className="p-2 bg-[#6C4CF4] rounded-lg mr-3 shadow-lg shadow-purple-500/30">
+                    <HelpCircle className="text-white w-5 h-5" />
+                </div>
+                <h3 className="text-xl font-display font-bold text-[#1A1A1A]">Knowledge Check</h3>
               </div>
               {activeModule.quiz.map((q, idx) => (
                 <QuizItem key={q.id} question={q} index={idx} />
@@ -50,44 +57,52 @@ export const CourseView: React.FC<CourseViewProps> = ({ course, initialModuleId 
           )}
 
           {activeModule.type === 'lab' && (
-            <div className="bg-amber-50 border border-amber-100 rounded-xl p-6 mt-6">
-                <h3 className="text-lg font-bold text-amber-900 mb-2">Interactive Lab Required</h3>
-                <p className="text-amber-800 mb-4">This module requires you to use the AI Tools to complete the assignment.</p>
-                <p className="text-sm text-amber-700">Go to <strong>AI Tools</strong> in the sidebar to access the Campaign Generator or Visual Lab.</p>
+            <div className="bg-gradient-to-br from-[#FFB14D]/10 to-[#FFB14D]/20 border border-[#FFB14D]/20 rounded-[24px] p-8 mt-8 flex flex-col sm:flex-row items-start gap-4">
+                <div className="p-3 bg-[#FFB14D] rounded-xl shadow-lg shadow-orange-500/20 text-white flex-shrink-0">
+                    <CheckCircle size={24} />
+                </div>
+                <div>
+                    <h3 className="text-lg font-bold text-[#1A1A1A] mb-2 font-display">Interactive Lab Required</h3>
+                    <p className="text-[#4A4A4A] mb-4 text-sm leading-relaxed">This module requires you to use the AI Tools to complete the assignment. The best way to learn is by doing.</p>
+                    <div className="inline-flex items-center text-[#FFB14D] text-sm font-bold bg-white px-4 py-2 rounded-full shadow-sm">
+                        Go to AI Tools in Sidebar <ArrowRight size={14} className="ml-2" />
+                    </div>
+                </div>
             </div>
           )}
         </div>
       </div>
 
       {/* Module List */}
-      <div className="w-full lg:w-80 bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col overflow-hidden">
-        <div className="p-4 border-b border-slate-100 bg-slate-50">
-          <h3 className="font-bold text-slate-800">Course Modules</h3>
-          <p className="text-xs text-slate-500">{course.modules.length} lessons • 2h 15m total</p>
+      <div className="w-full lg:w-[340px] bg-white rounded-[24px] shadow-[0px_1px_3px_rgba(0,0,0,0.06),0px_4px_10px_rgba(0,0,0,0.04)] border border-black/5 flex flex-col overflow-hidden h-fit max-h-full">
+        <div className="p-6 border-b border-gray-100">
+          <h3 className="font-display font-bold text-lg text-[#1A1A1A]">Course Modules</h3>
+          <p className="text-xs text-[#7E7E7E] mt-1 font-medium">{course.modules.length} lessons • 2h 15m total</p>
         </div>
-        <div className="overflow-y-auto flex-1 p-2 space-y-1">
+        <div className="overflow-y-auto flex-1 p-3 space-y-1">
           {course.modules.map((mod, idx) => (
             <button
               key={mod.id}
               onClick={() => setActiveModule(mod)}
-              className={`w-full text-left p-3 rounded-lg transition-all flex items-start group ${
+              className={`w-full text-left p-4 rounded-2xl transition-all flex items-start group relative overflow-hidden ${
                 activeModule.id === mod.id 
-                ? 'bg-indigo-50 border-indigo-200' 
-                : 'hover:bg-slate-50 border-transparent'
-              } border`}
+                ? 'bg-[#F7F8FA]' 
+                : 'hover:bg-white hover:shadow-md'
+              }`}
             >
-              <div className={`mt-1 mr-3 flex-shrink-0 ${activeModule.id === mod.id ? 'text-indigo-600' : 'text-slate-400'}`}>
-                {mod.type === 'video' && <PlayCircle size={18} />}
-                {mod.type === 'reading' && <FileText size={18} />}
-                {mod.type === 'lab' && <CheckCircle size={18} />}
+              {activeModule.id === mod.id && <div className="absolute left-0 top-1/2 -translate-y-1/2 h-8 w-1 bg-[#6C4CF4] rounded-r-full"></div>}
+              
+              <div className={`mt-0.5 mr-4 flex-shrink-0 transition-colors ${activeModule.id === mod.id ? 'text-[#6C4CF4]' : 'text-[#CBD5E1]'}`}>
+                {mod.type === 'video' && <PlayCircle size={20} strokeWidth={activeModule.id === mod.id ? 2.5 : 2} />}
+                {mod.type === 'reading' && <FileText size={20} strokeWidth={activeModule.id === mod.id ? 2.5 : 2} />}
+                {mod.type === 'lab' && <CheckCircle size={20} strokeWidth={activeModule.id === mod.id ? 2.5 : 2} />}
               </div>
-              <div>
-                <span className={`text-sm font-medium block mb-1 ${activeModule.id === mod.id ? 'text-indigo-900' : 'text-slate-700'}`}>
+              <div className="flex-1">
+                <span className={`text-[15px] font-bold block mb-1 font-display ${activeModule.id === mod.id ? 'text-[#1A1A1A]' : 'text-[#7E7E7E]'}`}>
                   {idx + 1}. {mod.title}
                 </span>
-                <span className="text-xs text-slate-400">{mod.duration}</span>
+                <span className="text-xs text-[#9CA3AF] font-medium">{mod.duration}</span>
               </div>
-              {activeModule.id === mod.id && <ChevronRight size={16} className="ml-auto mt-1 text-indigo-400" />}
             </button>
           ))}
         </div>
@@ -103,24 +118,24 @@ const QuizItem: React.FC<{ question: QuizQuestion; index: number }> = ({ questio
   const isCorrect = selected === question.correctAnswer;
 
   return (
-    <div className="mb-6 last:mb-0">
-      <p className="font-medium text-slate-800 mb-3">{index + 1}. {question.question}</p>
-      <div className="space-y-2">
+    <div className="mb-8 last:mb-0">
+      <p className="font-bold text-[#1A1A1A] mb-4 text-lg">{index + 1}. {question.question}</p>
+      <div className="space-y-3">
         {question.options.map((opt, idx) => (
           <button
             key={idx}
             disabled={isSubmitted}
             onClick={() => setSelected(idx)}
-            className={`w-full text-left px-4 py-3 rounded-lg text-sm border transition-all ${
+            className={`w-full text-left px-5 py-4 rounded-xl text-sm font-medium transition-all duration-200 border-2 ${
               isSubmitted
                 ? idx === question.correctAnswer
-                  ? 'bg-green-100 border-green-300 text-green-800'
+                  ? 'bg-[#60D46B]/10 border-[#60D46B] text-[#1A1A1A]'
                   : idx === selected
-                  ? 'bg-red-100 border-red-300 text-red-800'
-                  : 'bg-white border-slate-200 text-slate-400'
+                  ? 'bg-red-50 border-red-300 text-red-800'
+                  : 'bg-white border-transparent text-slate-400'
                 : selected === idx
-                ? 'bg-indigo-50 border-indigo-300 text-indigo-900 ring-1 ring-indigo-300'
-                : 'bg-white border-slate-200 hover:bg-slate-50 text-slate-700'
+                ? 'bg-white border-[#6C4CF4] text-[#6C4CF4] shadow-[0_0_0_4px_rgba(108,76,244,0.1)]'
+                : 'bg-white border-transparent hover:bg-white hover:shadow-md text-[#4A4A4A]'
             }`}
           >
             {opt}
@@ -130,19 +145,19 @@ const QuizItem: React.FC<{ question: QuizQuestion; index: number }> = ({ questio
       {!isSubmitted && selected !== null && (
         <button 
           onClick={() => setIsSubmitted(true)}
-          className="mt-3 text-sm font-semibold text-indigo-600 hover:text-indigo-800"
+          className="mt-5 text-sm font-bold text-white bg-[#1A1A1A] px-6 py-3 rounded-full hover:bg-[#6C4CF4] transition-colors shadow-lg"
         >
           Submit Answer
         </button>
       )}
       {isSubmitted && (
-        <div className={`mt-3 p-3 rounded-lg text-sm flex items-start ${isCorrect ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'}`}>
-            <div className="mr-2 mt-0.5">
-                {isCorrect ? <CheckCircle size={16} /> : <AlertCircle size={16} />}
+        <div className={`mt-5 p-5 rounded-2xl text-sm flex items-start animate-fade-in ${isCorrect ? 'bg-[#60D46B]/10 text-[#1A1A1A]' : 'bg-red-50 text-red-800'}`}>
+            <div className={`mr-3 mt-0.5 p-1 rounded-full ${isCorrect ? 'bg-[#60D46B] text-white' : 'bg-red-500 text-white'}`}>
+                {isCorrect ? <CheckCircle size={14} /> : <AlertCircle size={14} />}
             </div>
             <div>
-                <span className="font-bold block mb-1">{isCorrect ? 'Correct!' : 'Incorrect'}</span>
-                {question.explanation}
+                <span className="font-bold block mb-1 text-base">{isCorrect ? 'Correct!' : 'Incorrect'}</span>
+                <p className="opacity-90 leading-relaxed">{question.explanation}</p>
             </div>
         </div>
       )}

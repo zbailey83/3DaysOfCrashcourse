@@ -1,4 +1,4 @@
-import { GoogleGenAI, Modality } from "@google/genai";
+import { GoogleGenAI } from "@google/genai";
 import { GEMINI_TEXT_MODEL, GEMINI_IMAGE_MODEL } from "../constants";
 
 const getClient = () => {
@@ -50,15 +50,16 @@ export const generateImage = async (prompt: string) => {
     contents: {
       parts: [{ text: prompt }]
     },
-    config: {
-      responseModalities: [Modality.IMAGE]
-    }
   });
 
   // Extract base64 data
-  const part = response.candidates?.[0]?.content?.parts?.[0];
-  if (part && part.inlineData && part.inlineData.data) {
-    return `data:image/png;base64,${part.inlineData.data}`;
+  const parts = response.candidates?.[0]?.content?.parts;
+  if (parts) {
+    for (const part of parts) {
+      if (part.inlineData && part.inlineData.data) {
+        return `data:image/png;base64,${part.inlineData.data}`;
+      }
+    }
   }
   
   throw new Error("No image generated");
