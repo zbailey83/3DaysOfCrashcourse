@@ -139,28 +139,28 @@ export const Profile: React.FC = () => {
     if (loading && !profile) {
         return (
             <div className="flex items-center justify-center h-full">
-                <Loader2 className="animate-spin text-[#2563EB]" size={32} />
+                <Loader2 className="animate-spin text-primary" size={32} />
             </div>
         );
     }
 
     return (
         <div className="max-w-2xl mx-auto animate-slide-up pb-10">
-            <h1 className="text-3xl font-display font-bold text-[#0F172A] mb-8">Profile Settings</h1>
+            <h1 className="text-3xl font-display font-bold text-text-primary mb-8">Profile Settings</h1>
 
-            <div className="bg-white rounded-[24px] p-8 shadow-sm border border-slate-100 mb-8">
+            <div className="glass-card rounded-[24px] p-8 mb-8">
                 <div className="flex flex-col items-center mb-8">
                     <div className="relative group">
-                        <div className="w-32 h-32 rounded-full overflow-hidden bg-slate-100 border-4 border-white shadow-lg mb-4">
+                        <div className="w-32 h-32 rounded-full overflow-hidden bg-white/5 border-4 border-white/10 shadow-lg mb-4">
                             {avatarUrl ? (
                                 <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
                             ) : (
-                                <div className="w-full h-full flex items-center justify-center text-slate-300">
+                                <div className="w-full h-full flex items-center justify-center text-muted">
                                     <User size={48} />
                                 </div>
                             )}
                         </div>
-                        <label className="absolute bottom-4 right-0 bg-[#2563EB] text-white p-2 rounded-full cursor-pointer hover:bg-blue-600 transition-colors shadow-md" htmlFor="avatar-upload">
+                        <label className="absolute bottom-4 right-0 bg-primary text-white p-2 rounded-full cursor-pointer hover:bg-blue-600 transition-colors shadow-md" htmlFor="avatar-upload">
                             {uploading ? <Loader2 size={16} className="animate-spin" /> : <Camera size={16} />}
                         </label>
                         <input
@@ -172,25 +172,25 @@ export const Profile: React.FC = () => {
                             className="hidden"
                         />
                     </div>
-                    <h2 className="text-xl font-bold text-[#0F172A]">{fullName || 'User'}</h2>
-                    <p className="text-slate-500 text-sm">{profile?.email}</p>
+                    <h2 className="text-xl font-bold text-text-primary">{fullName || 'User'}</h2>
+                    <p className="text-muted text-sm">{profile?.email}</p>
                 </div>
 
                 <div className="space-y-6">
                     <div>
-                        <label className="block text-sm font-bold text-[#0F172A] mb-2">Full Name</label>
+                        <label className="block text-sm font-bold text-text-primary mb-2">Full Name</label>
                         <input
                             type="text"
                             value={fullName}
                             onChange={(e) => setFullName(e.target.value)}
-                            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-[#2563EB] focus:ring-2 focus:ring-blue-500/20 outline-none transition-all"
+                            className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
                             placeholder="Enter your full name"
                         />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-bold text-[#0F172A] mb-2">Email Address</label>
-                        <div className="flex items-center px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-500">
+                        <label className="block text-sm font-bold text-text-primary mb-2">Email Address</label>
+                        <div className="flex items-center px-4 py-3 rounded-xl border border-white/10 bg-white/5 text-muted">
                             <Mail size={18} className="mr-3" />
                             <span>{profile?.email}</span>
                         </div>
@@ -199,7 +199,7 @@ export const Profile: React.FC = () => {
                     <button
                         onClick={updateProfile}
                         disabled={loading}
-                        className="w-full py-3 rounded-xl font-bold text-white bg-[#0F172A] hover:bg-[#2563EB] transition-colors flex items-center justify-center shadow-lg shadow-blue-500/10"
+                        className="w-full py-3 rounded-xl font-bold text-white bg-gradient-to-r from-primary to-secondary hover:shadow-glow transition-all flex items-center justify-center shadow-lg"
                     >
                         {loading ? <Loader2 size={18} className="animate-spin mr-2" /> : <Save size={18} className="mr-2" />}
                         Save Changes
@@ -208,23 +208,23 @@ export const Profile: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-2 gap-4 mb-8">
-                <div className="bg-white p-6 rounded-[24px] border border-slate-100 shadow-sm">
-                    <div className="text-slate-500 text-xs font-bold uppercase tracking-wider mb-2">Modules Completed</div>
-                    <div className="text-3xl font-display font-bold text-[#0F172A]">{stats.completedModules}</div>
+                <div className="glass-card p-6 rounded-[24px]">
+                    <div className="text-muted text-xs font-bold uppercase tracking-wider mb-2">Modules Completed</div>
+                    <div className="text-3xl font-display font-bold text-text-primary">{stats.completedModules}</div>
                 </div>
-                <div className="bg-white p-6 rounded-[24px] border border-slate-100 shadow-sm">
-                    <div className="text-slate-500 text-xs font-bold uppercase tracking-wider mb-2">Artifacts Created</div>
-                    <div className="text-3xl font-display font-bold text-[#0F172A]">{stats.totalArtifacts}</div>
+                <div className="glass-card p-6 rounded-[24px]">
+                    <div className="text-muted text-xs font-bold uppercase tracking-wider mb-2">Artifacts Created</div>
+                    <div className="text-3xl font-display font-bold text-text-primary">{stats.totalArtifacts}</div>
                 </div>
             </div>
 
             <div className="mb-8">
-                <StreakCounter className="bg-white border-slate-100 shadow-sm" />
+                <StreakCounter className="glass-card border-white/10 shadow-sm" />
             </div>
 
             <button
                 onClick={handleSignOut}
-                className="w-full py-4 rounded-xl font-bold text-red-600 bg-red-50 hover:bg-red-100 transition-colors flex items-center justify-center"
+                className="w-full py-4 rounded-xl font-bold text-danger bg-danger/10 hover:bg-danger/20 transition-colors flex items-center justify-center border border-danger/20"
             >
                 <LogOut size={18} className="mr-2" />
                 Sign Out

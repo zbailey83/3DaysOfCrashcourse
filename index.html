@@ -1,25 +1,129 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 
 <head>
   <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MarketerAI Academy</title>
+  <title>MarketerAI - AI Content Mastery</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: 'var(--color-primary)',
+            secondary: 'var(--color-secondary)',
+            accent: '#22C55E',
+            danger: '#F97373',
+            success: '#4ADE80',
+            muted: 'var(--color-muted)',
+            'surface-glass': 'var(--surface-glass)',
+            'surface-glass-soft': 'var(--surface-glass-soft)',
+            'border-light': 'var(--border-light)',
+            'border-strong': 'var(--border-strong)',
+            'text-primary': 'var(--text-primary)',
+            'text-secondary': 'var(--text-secondary)',
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            display: ['Poppins', 'system-ui', 'sans-serif'],
+          },
+          boxShadow: {
+            'soft': '0 18px 45px rgba(0, 0, 0, 0.35)',
+            'subtle': '0 8px 20px rgba(0, 0, 0, 0.25)',
+            'glow': '0 0 20px rgba(56, 189, 248, 0.5)',
+          },
+          backdropBlur: {
+            'xs': '2px',
+          }
+        }
+      }
+    }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..900&family=Inter:wght@300;400;500;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap"
     rel="stylesheet">
   <style>
+    :root {
+      /* Light Mode Defaults */
+      --color-primary: #0284C7;
+      /* Darker blue for contrast on light */
+      --color-secondary: #9333EA;
+      --color-muted: #64748B;
+      --surface-glass: rgba(255, 255, 255, 0.7);
+      --surface-glass-soft: rgba(255, 255, 255, 0.5);
+      --border-light: rgba(0, 0, 0, 0.1);
+      --border-strong: rgba(0, 0, 0, 0.2);
+      --text-primary: #0F172A;
+      --text-secondary: #475569;
+      --bg-base: #F0F9FF;
+      /* Very light blueish white */
+      --grid-color: rgba(0, 0, 0, 0.08);
+      --glass-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .dark {
+      /* Dark Mode Overrides */
+      --color-primary: #38BDF8;
+      --color-secondary: #A855F7;
+      --color-muted: #94A3B8;
+      --surface-glass: rgba(15, 23, 42, 0.65);
+      --surface-glass-soft: rgba(15, 23, 42, 0.5);
+      --border-light: rgba(255, 255, 255, 0.2);
+      --border-strong: rgba(255, 255, 255, 0.3);
+      --text-primary: #F9FAFB;
+      --text-secondary: #CBD5F5;
+      --bg-base: #020617;
+      /* Deep dark blue/black */
+      --grid-color: rgba(255, 255, 255, 0.08);
+      --glass-shadow: 0 18px 45px rgba(0, 0, 0, 0.5);
+    }
+
     body {
       font-family: 'Inter', sans-serif;
-      background-color: #F8FAFC;
-      color: #0F172A;
+      background-color: var(--bg-base);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      position: relative;
+    }
+
+    /* Grid Background Pattern */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
       background-image:
-        linear-gradient(to right, rgba(15, 23, 42, 0.03) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(15, 23, 42, 0.03) 1px, transparent 1px);
-      background-size: 40px 40px;
+        linear-gradient(var(--grid-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+      background-size: 24px 24px;
+      opacity: 0.5;
+      /* 40-60% opacity as requested */
+    }
+
+    /* Dark Mode Gradient Overlay */
+    .dark body::after {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -2;
+      background: radial-gradient(circle at top left, #071629 0%, transparent 60%),
+        radial-gradient(circle at bottom right, #1e1b4b 0%, transparent 60%);
+      opacity: 0.8;
     }
 
     h1,
@@ -28,17 +132,30 @@
     h4,
     h5,
     h6 {
-      font-family: 'Fraunces', serif;
+      font-family: 'Poppins', sans-serif;
     }
 
-    .font-display {
-      font-family: 'Fraunces', serif;
+    .glass-card {
+      background: var(--surface-glass);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid var(--border-light);
+      box-shadow: var(--glass-shadow);
+      transition: all 0.3s ease;
     }
 
-    /* Custom Scrollbar - Blue Theme */
+    .glass-panel {
+      background: var(--surface-glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-right: 1px solid var(--border-light);
+      transition: all 0.3s ease;
+    }
+
+    /* Custom Scrollbar */
     ::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
+      width: 6px;
+      height: 6px;
     }
 
     ::-webkit-scrollbar-track {
@@ -46,83 +163,14 @@
     }
 
     ::-webkit-scrollbar-thumb {
-      background: #CBD5E1;
-      border-radius: 4px;
-      transition: background 0.2s;
+      background: var(--border-strong);
+      border-radius: 3px;
     }
 
     ::-webkit-scrollbar-thumb:hover {
-      background: #94A3B8;
-    }
-
-    /* Animations */
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-      }
-
-      to {
-        opacity: 1;
-      }
-    }
-
-    @keyframes slideUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes pulse-soft {
-
-      0%,
-      100% {
-        opacity: 1;
-      }
-
-      50% {
-        opacity: 0.7;
-      }
-    }
-
-    .animate-fade-in {
-      animation: fadeIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-    }
-
-    .animate-slide-up {
-      animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-
-    /* Stagger delays for lists */
-    .delay-100 {
-      animation-delay: 100ms;
-    }
-
-    .delay-200 {
-      animation-delay: 200ms;
-    }
-
-    .delay-300 {
-      animation-delay: 300ms;
+      background: var(--color-muted);
     }
   </style>
-  <script type="importmap">
-{
-  "imports": {
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.554.0",
-    "react/": "https://aistudiocdn.com/react@^19.2.0/",
-    "react": "https://aistudiocdn.com/react@^19.2.0",
-    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
-    "recharts": "https://aistudiocdn.com/recharts@^3.4.1"
-  }
-}
-</script>
 </head>
 
 <body>

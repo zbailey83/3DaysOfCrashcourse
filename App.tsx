@@ -10,7 +10,7 @@ import { Workspace } from './components/Workspace';
 import { Profile } from './components/Profile';
 import { Auth } from './components/Auth';
 import { COURSES } from './constants';
-import { Menu } from 'lucide-react';
+import { Menu, Sun, Moon } from 'lucide-react';
 import { supabase } from './lib/supabase';
 import { Session } from '@supabase/supabase-js';
 
@@ -26,6 +26,7 @@ const App: React.FC = () => {
   const [session, setSession] = useState<Session | null>(null);
   const [currentView, setCurrentView] = useState<ViewState>({ type: 'dashboard' });
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [theme, setTheme] = useState<'light' | 'dark'>('dark');
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -38,8 +39,32 @@ const App: React.FC = () => {
       setSession(session);
     });
 
+    // Initialize theme from local storage or system preference
+    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null;
+    if (savedTheme) {
+      setTheme(savedTheme);
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      setTheme('dark');
+    } else {
+      setTheme('light'); // Default to light if no preference
+    }
+
     return () => subscription.unsubscribe();
   }, []);
+
+  useEffect(() => {
+    const html = document.documentElement;
+    if (theme === 'dark') {
+      html.classList.add('dark');
+    } else {
+      html.classList.remove('dark');
+    }
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+  };
 
   const handleNavigate = (view: ViewState) => {
     setCurrentView(view);
@@ -79,36 +104,50 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className="flex h-screen bg-[#F8FAFC] text-[#0F172A] overflow-hidden selection:bg-[#2563EB] selection:text-white">
+    <div className="flex h-screen bg-transparent text-text-primary overflow-hidden selection:bg-primary selection:text-white">
       {/* Mobile Menu Overlay */}
       <div
-        className={`fixed inset-0 bg-[#0F172A]/30 backdrop-blur-md z-40 transition-opacity duration-300 md:hidden ${isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-40 transition-opacity duration-300 md:hidden ${isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
           }`}
         onClick={() => setIsMobileMenuOpen(false)}
       />
 
       {/* Sidebar */}
-      <div className={`fixed inset-y-0 left-0 z-50 w-[280px] bg-white shadow-2xl md:shadow-none md:border-r border-slate-200 transform transition-transform duration-400 cubic-bezier(0.16, 1, 0.3, 1) md:relative md:translate-x-0 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-        <Sidebar currentView={currentView} onNavigate={handleNavigate} onCloseMobile={() => setIsMobileMenuOpen(false)} />
+      <div className={`fixed inset-y-0 left-0 z-50 w-[280px] transform transition-transform duration-400 cubic-bezier(0.16, 1, 0.3, 1) md:relative md:translate-x-0 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        <Sidebar
+          currentView={currentView}
+          onNavigate={handleNavigate}
+          onCloseMobile={() => setIsMobileMenuOpen(false)}
+          theme={theme}
+          onToggleTheme={toggleTheme}
+        />
       </div>
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
         {/* Mobile Header */}
-        <header className="bg-white/80 backdrop-blur-xl border-b border-slate-200 md:hidden flex items-center justify-between p-4 sticky top-0 z-30">
+        <header className="bg-surface-glass backdrop-blur-xl border-b border-border-light md:hidden flex items-center justify-between p-4 sticky top-0 z-30">
           <div className="flex items-center">
             <button
               onClick={() => setIsMobileMenuOpen(true)}
-              className="p-2 -ml-2 rounded-full hover:bg-slate-100 text-[#0F172A] transition-colors"
+              className="p-2 -ml-2 rounded-full hover:bg-white/10 text-text-primary transition-colors"
             >
               <Menu size={24} />
             </button>
-            <span className="ml-3 font-display font-bold text-xl bg-clip-text text-transparent bg-gradient-to-r from-[#2563EB] to-[#06B6D4]">
+            <span className="ml-3 font-display font-bold text-xl bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
               MarketerAI
             </span>
           </div>
-          <div className="w-9 h-9 rounded-full bg-gradient-to-r from-[#2563EB] to-[#06B6D4] p-[2px] shadow-md">
-            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Alex" alt="User" className="rounded-full bg-white h-full w-full" />
+          <div className="flex items-center space-x-3">
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-all text-muted hover:text-text-primary"
+            >
+              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
+            <div className="w-9 h-9 rounded-full bg-gradient-to-r from-primary to-secondary p-[2px] shadow-glow">
+              <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Alex" alt="User" className="rounded-full bg-black h-full w-full" />
+            </div>
           </div>
         </header>
 

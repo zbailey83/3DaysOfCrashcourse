@@ -68,26 +68,26 @@ export const CampaignGenerator: React.FC = () => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 h-full animate-slide-up">
       {/* Input Section */}
-      <div className="lg:col-span-5 bg-white p-6 md:p-8 rounded-[24px] shadow-[0px_1px_3px_rgba(0,0,0,0.06),0px_4px_10px_rgba(0,0,0,0.04)] border border-slate-100 h-fit">
+      <div className="lg:col-span-5 glass-card p-6 md:p-8 rounded-[24px] h-fit">
         <div className="mb-8">
-          <div className="inline-flex items-center justify-center p-3 bg-[#2563EB]/10 rounded-xl mb-4">
-            <Sparkles className="text-[#2563EB] w-6 h-6" />
+          <div className="inline-flex items-center justify-center p-3 bg-primary/10 rounded-xl mb-4">
+            <Sparkles className="text-primary w-6 h-6" />
           </div>
-          <h2 className="text-2xl md:text-3xl font-display font-bold text-[#0F172A] mb-2">Campaign Generator</h2>
-          <p className="text-[#64748B] text-sm md:text-base">Generate targeted assets based on your unique business context.</p>
+          <h2 className="text-2xl md:text-3xl font-display font-bold text-text-primary mb-2">Campaign Generator</h2>
+          <p className="text-muted text-sm md:text-base">Generate targeted assets based on your unique business context.</p>
         </div>
 
         <form onSubmit={handleGenerate} className="space-y-5">
           {/* Business Input Template */}
           <div className="space-y-4">
             <div>
-              <label className="flex items-center text-sm font-bold text-[#0F172A] mb-2">
-                <Briefcase size={16} className="mr-2 text-slate-400" /> Business Name
+              <label className="flex items-center text-sm font-bold text-text-primary mb-2">
+                <Briefcase size={16} className="mr-2 text-muted" /> Business Name
               </label>
               <input
                 type="text"
                 required
-                className="w-full p-3.5 bg-[#F8FAFC] border border-slate-100 rounded-xl focus:bg-white focus:border-[#2563EB]/50 focus:ring-4 focus:ring-[#2563EB]/10 outline-none transition-all font-medium text-[#0F172A] placeholder:text-gray-400"
+                className="w-full p-3.5 bg-white/5 border border-white/10 rounded-xl focus:bg-white/10 focus:border-primary/50 focus:ring-4 focus:ring-primary/10 outline-none transition-all font-medium text-white placeholder:text-slate-500"
                 placeholder="e.g., EcoStride"
                 value={businessName}
                 onChange={(e) => setBusinessName(e.target.value)}
@@ -95,13 +95,13 @@ export const CampaignGenerator: React.FC = () => {
             </div>
 
             <div>
-              <label className="flex items-center text-sm font-bold text-[#0F172A] mb-2">
-                <Target size={16} className="mr-2 text-slate-400" /> Target Audience
+              <label className="flex items-center text-sm font-bold text-text-primary mb-2">
+                <Target size={16} className="mr-2 text-muted" /> Target Audience
               </label>
               <input
                 type="text"
                 required
-                className="w-full p-3.5 bg-[#F8FAFC] border border-slate-100 rounded-xl focus:bg-white focus:border-[#2563EB]/50 focus:ring-4 focus:ring-[#2563EB]/10 outline-none transition-all font-medium text-[#0F172A] placeholder:text-gray-400"
+                className="w-full p-3.5 bg-white/5 border border-white/10 rounded-xl focus:bg-white/10 focus:border-primary/50 focus:ring-4 focus:ring-primary/10 outline-none transition-all font-medium text-white placeholder:text-slate-500"
                 placeholder="e.g., Urban professionals, 25-35"
                 value={targetAudience}
                 onChange={(e) => setTargetAudience(e.target.value)}
@@ -109,12 +109,12 @@ export const CampaignGenerator: React.FC = () => {
             </div>
 
             <div>
-              <label className="flex items-center text-sm font-bold text-[#0F172A] mb-2">
-                <Megaphone size={16} className="mr-2 text-slate-400" /> Key Offer / Product
+              <label className="flex items-center text-sm font-bold text-text-primary mb-2">
+                <Megaphone size={16} className="mr-2 text-muted" /> Key Offer / Product
               </label>
               <textarea
                 required
-                className="w-full p-3.5 bg-[#F8FAFC] border border-slate-100 rounded-xl focus:bg-white focus:border-[#2563EB]/50 focus:ring-4 focus:ring-[#2563EB]/10 outline-none transition-all h-24 font-medium text-[#0F172A] placeholder:text-gray-400 resize-none"
+                className="w-full p-3.5 bg-white/5 border border-white/10 rounded-xl focus:bg-white/10 focus:border-primary/50 focus:ring-4 focus:ring-primary/10 outline-none transition-all h-24 font-medium text-white placeholder:text-slate-500 resize-none"
                 placeholder="Describe what you're promoting..."
                 value={keyOffer}
                 onChange={(e) => setKeyOffer(e.target.value)}
@@ -122,13 +122,13 @@ export const CampaignGenerator: React.FC = () => {
             </div>
 
             <div>
-              <label className="flex items-center text-sm font-bold text-[#0F172A] mb-2">
-                <Target size={16} className="mr-2 text-slate-400" /> Main Goal
+              <label className="flex items-center text-sm font-bold text-text-primary mb-2">
+                <Target size={16} className="mr-2 text-muted" /> Main Goal
               </label>
               <input
                 type="text"
                 required
-                className="w-full p-3.5 bg-[#F8FAFC] border border-slate-100 rounded-xl focus:bg-white focus:border-[#2563EB]/50 focus:ring-4 focus:ring-[#2563EB]/10 outline-none transition-all font-medium text-[#0F172A] placeholder:text-gray-400"
+                className="w-full p-3.5 bg-white/5 border border-white/10 rounded-xl focus:bg-white/10 focus:border-primary/50 focus:ring-4 focus:ring-primary/10 outline-none transition-all font-medium text-white placeholder:text-slate-500"
                 placeholder="e.g., Drive website traffic, Brand awareness"
                 value={mainGoal}
                 onChange={(e) => setMainGoal(e.target.value)}
@@ -137,18 +137,18 @@ export const CampaignGenerator: React.FC = () => {
           </div>
 
           {/* Mode Toggle */}
-          <div className="p-1 bg-slate-100 rounded-xl flex relative">
+          <div className="p-1 bg-black/5 dark:bg-white/5 rounded-xl flex relative border border-black/5 dark:border-white/10">
             <button
               type="button"
               onClick={() => setMode('ad')}
-              className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-all flex items-center justify-center ${mode === 'ad' ? 'bg-white text-[#2563EB] shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+              className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-all flex items-center justify-center ${mode === 'ad' ? 'bg-primary/20 text-text-primary dark:text-white shadow-glow' : 'text-muted hover:text-text-primary'}`}
             >
               <Video size={16} className="mr-2" /> Ad Campaign
             </button>
             <button
               type="button"
               onClick={() => setMode('calendar')}
-              className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-all flex items-center justify-center ${mode === 'calendar' ? 'bg-white text-[#2563EB] shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+              className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-all flex items-center justify-center ${mode === 'calendar' ? 'bg-primary/20 text-text-primary dark:text-white shadow-glow' : 'text-muted hover:text-text-primary'}`}
             >
               <Calendar size={16} className="mr-2" /> Content Calendar
             </button>
@@ -157,7 +157,7 @@ export const CampaignGenerator: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-[#2563EB] to-[#06B6D4] hover:scale-[1.02] text-white font-bold py-4 rounded-full transition-all shadow-[0px_0px_15px_rgba(37,99,235,0.4)] flex items-center justify-center disabled:opacity-50 disabled:shadow-none disabled:hover:scale-100 relative overflow-hidden"
+            className="w-full bg-gradient-to-r from-primary to-secondary hover:scale-[1.02] text-white font-bold py-4 rounded-full transition-all shadow-glow flex items-center justify-center disabled:opacity-50 disabled:shadow-none disabled:hover:scale-100 relative overflow-hidden"
           >
             {loading ? (
               <>
@@ -173,7 +173,7 @@ export const CampaignGenerator: React.FC = () => {
       {/* Output Section */}
       <div className="lg:col-span-7 space-y-6">
         {!adResult && !calendarResult && !loading && (
-          <div className="h-full flex flex-col items-center justify-center text-[#94A3B8] border-2 border-dashed border-[#E2E8F0] rounded-[24px] p-12 bg-white/50 min-h-[400px]">
+          <div className="h-full flex flex-col items-center justify-center text-muted border-2 border-dashed border-white/10 rounded-[24px] p-12 bg-white/5 min-h-[400px]">
             <Layout size={48} className="mb-4 opacity-20" />
             <p className="font-medium">Generated assets will appear here</p>
           </div>
@@ -183,35 +183,35 @@ export const CampaignGenerator: React.FC = () => {
         {adResult && mode === 'ad' && (
           <div className="animate-fade-in space-y-6">
             {/* Script Card */}
-            <div className="bg-white p-8 rounded-[24px] shadow-[0px_1px_3px_rgba(0,0,0,0.06),0px_4px_10px_rgba(0,0,0,0.04)] border border-slate-100 group hover:border-[#2563EB]/30 transition-all hover:shadow-lg duration-300">
+            <div className="glass-card p-8 rounded-[24px] group hover:border-primary/30 transition-all hover:shadow-glow duration-300">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="font-display font-bold text-[#0F172A] flex items-center text-xl"><Video className="mr-3 text-[#2563EB]" size={20} /> Video Script</h3>
-                <button className="text-[#94A3B8] hover:text-[#2563EB] transition-colors p-2 hover:bg-[#EFF6FF] rounded-full"><Copy size={18} /></button>
+                <h3 className="font-display font-bold text-text-primary flex items-center text-xl"><Video className="mr-3 text-primary" size={20} /> Video Script</h3>
+                <button className="text-muted hover:text-primary transition-colors p-2 hover:bg-white/5 rounded-full"><Copy size={18} /></button>
               </div>
-              <div className="bg-[#F8FAFC] p-6 rounded-2xl text-sm font-mono whitespace-pre-wrap text-[#475569] border border-transparent group-hover:border-[#2563EB]/10 transition-colors leading-relaxed">
+              <div className="bg-white/5 p-6 rounded-2xl text-sm font-mono whitespace-pre-wrap text-text-secondary border border-transparent group-hover:border-primary/10 transition-colors leading-relaxed">
                 {adResult.script}
               </div>
             </div>
 
             {/* Social Posts */}
-            <div className="bg-white p-8 rounded-[24px] shadow-[0px_1px_3px_rgba(0,0,0,0.06),0px_4px_10px_rgba(0,0,0,0.04)] border border-slate-100">
-              <h3 className="font-display font-bold text-[#0F172A] mb-6 flex items-center text-xl"><Share2 className="mr-3 text-[#06B6D4]" size={20} /> Social Copy</h3>
+            <div className="glass-card p-8 rounded-[24px]">
+              <h3 className="font-display font-bold text-text-primary mb-6 flex items-center text-xl"><Share2 className="mr-3 text-secondary" size={20} /> Social Copy</h3>
               <div className="space-y-4">
                 {adResult.socialPosts.map((post, idx) => (
-                  <div key={idx} className="bg-[#F8FAFC] p-5 rounded-2xl border border-transparent hover:border-[#06B6D4]/20 transition-all hover:bg-white hover:shadow-sm">
-                    <span className="text-[10px] font-bold text-[#64748B] uppercase tracking-widest bg-white px-2 py-1 rounded-md shadow-sm mb-3 inline-block">{post.platform}</span>
-                    <p className="mt-1 text-[#0F172A] font-medium leading-relaxed">{post.content}</p>
+                  <div key={idx} className="bg-white/5 p-5 rounded-2xl border border-transparent hover:border-secondary/20 transition-all hover:bg-white/10 hover:shadow-sm">
+                    <span className="text-[10px] font-bold text-muted uppercase tracking-widest bg-white/10 px-2 py-1 rounded-md shadow-sm mb-3 inline-block">{post.platform}</span>
+                    <p className="mt-1 text-text-primary font-medium leading-relaxed">{post.content}</p>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* SEO Keywords */}
-            <div className="bg-white p-8 rounded-[24px] shadow-[0px_1px_3px_rgba(0,0,0,0.06),0px_4px_10px_rgba(0,0,0,0.04)] border border-slate-100">
-              <h3 className="font-display font-bold text-[#0F172A] mb-6 flex items-center text-xl"><Hash className="mr-3 text-[#10B981]" size={20} /> SEO Targets</h3>
+            <div className="glass-card p-8 rounded-[24px]">
+              <h3 className="font-display font-bold text-text-primary mb-6 flex items-center text-xl"><Hash className="mr-3 text-success" size={20} /> SEO Targets</h3>
               <div className="flex flex-wrap gap-3">
                 {adResult.seoKeywords.map((kw, idx) => (
-                  <span key={idx} className="px-4 py-2 bg-[#10B981]/10 text-[#065F46] rounded-full text-sm font-bold border border-[#10B981]/20 hover:scale-105 transition-transform cursor-default">
+                  <span key={idx} className="px-4 py-2 bg-success/10 text-success rounded-full text-sm font-bold border border-success/20 hover:scale-105 transition-transform cursor-default">
                     #{kw}
                   </span>
                 ))}
@@ -223,29 +223,29 @@ export const CampaignGenerator: React.FC = () => {
         {/* Calendar Result View */}
         {calendarResult && mode === 'calendar' && (
           <div className="animate-fade-in space-y-6">
-            <div className="bg-white p-8 rounded-[24px] shadow-[0px_1px_3px_rgba(0,0,0,0.06),0px_4px_10px_rgba(0,0,0,0.04)] border border-slate-100">
+            <div className="glass-card p-8 rounded-[24px]">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="font-display font-bold text-[#0F172A] flex items-center text-xl"><Calendar className="mr-3 text-[#2563EB]" size={20} /> 7-Day Content Plan</h3>
-                <button className="text-[#94A3B8] hover:text-[#2563EB] transition-colors p-2 hover:bg-[#EFF6FF] rounded-full"><Copy size={18} /></button>
+                <h3 className="font-display font-bold text-text-primary flex items-center text-xl"><Calendar className="mr-3 text-primary" size={20} /> 7-Day Content Plan</h3>
+                <button className="text-muted hover:text-primary transition-colors p-2 hover:bg-white/5 rounded-full"><Copy size={18} /></button>
               </div>
 
               <div className="space-y-4">
                 {calendarResult.calendar.map((day, idx) => (
-                  <div key={idx} className="flex flex-col md:flex-row gap-4 p-5 bg-[#F8FAFC] rounded-2xl border border-transparent hover:border-[#2563EB]/20 transition-all hover:bg-white hover:shadow-sm">
+                  <div key={idx} className="flex flex-col md:flex-row gap-4 p-5 bg-white/5 rounded-2xl border border-transparent hover:border-primary/20 transition-all hover:bg-white/10 hover:shadow-sm">
                     <div className="flex-shrink-0 w-full md:w-24">
-                      <span className="text-xs font-bold text-[#2563EB] bg-[#EFF6FF] px-3 py-1 rounded-full">{day.day}</span>
-                      <div className="mt-2 text-[10px] font-semibold text-[#64748B] uppercase tracking-wider">{day.platform}</div>
+                      <span className="text-xs font-bold text-primary bg-primary/10 px-3 py-1 rounded-full">{day.day}</span>
+                      <div className="mt-2 text-[10px] font-semibold text-muted uppercase tracking-wider">{day.platform}</div>
                     </div>
                     <div className="flex-1">
-                      <h4 className="font-bold text-[#0F172A] mb-1">{day.theme}</h4>
-                      <p className="text-sm text-[#475569] leading-relaxed">{day.post_idea}</p>
+                      <h4 className="font-bold text-text-primary mb-1">{day.theme}</h4>
+                      <p className="text-sm text-text-secondary leading-relaxed">{day.post_idea}</p>
                     </div>
                   </div>
                 ))}
               </div>
 
               {calendarResult.strategy_note && (
-                <div className="mt-6 p-5 bg-[#F0FDF4] rounded-2xl border border-[#DCFCE7] text-[#166534] text-sm leading-relaxed">
+                <div className="mt-6 p-5 bg-success/5 rounded-2xl border border-success/20 text-success text-sm leading-relaxed">
                   <span className="font-bold block mb-1">💡 Strategy Note:</span>
                   {calendarResult.strategy_note}
                 </div>
