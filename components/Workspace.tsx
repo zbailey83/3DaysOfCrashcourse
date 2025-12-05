@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useArtifacts } from '../hooks/useArtifacts';
 import { supabase } from '../lib/supabase';
-import { FileText, Image as ImageIcon, Search, Mic, Trash2, ExternalLink, Calendar } from 'lucide-react';
+import { FileText, Image as ImageIcon, Search, Mic, Trash2, ExternalLink, Calendar, Download, Share2 } from 'lucide-react';
 
 export const Workspace: React.FC = () => {
     const [userId, setUserId] = useState<string | undefined>(undefined);
@@ -22,6 +22,49 @@ export const Workspace: React.FC = () => {
             case 'seo_analysis': return <Search size={20} className="text-success" />;
             case 'brand_voice': return <Mic size={20} className="text-pink-500" />;
             default: return <FileText size={20} className="text-muted" />;
+        }
+    };
+
+    const handleDownload = (artifact: any) => {
+        if (artifact.type === 'image' && artifact.content?.url) {
+            const link = document.createElement('a');
+            link.href = artifact.content.url;
+            link.download = `${artifact.title || 'image'}.png`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } else {
+            const blob = new Blob([JSON.stringify(artifact.content, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `${artifact.title || 'artifact'}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+    };
+
+    const handleShare = async (artifact: any) => {
+        const shareData = {
+            title: artifact.title || 'Shared Artifact',
+            text: JSON.stringify(artifact.content),
+            url: artifact.type === 'image' ? artifact.content?.url : window.location.href,
+        };
+
+        if (navigator.share) {
+            try {
+                await navigator.share(shareData);
+            } catch (err) {
+                console.error('Share failed:', err);
+            }
+        } else {
+            const contentToCopy = artifact.type === 'image'
+                ? artifact.content.url
+                : JSON.stringify(artifact.content, null, 2);
+            navigator.clipboard.writeText(contentToCopy);
+            alert('Content copied to clipboard!');
         }
     };
 
@@ -86,6 +129,20 @@ export const Workspace: React.FC = () => {
                                     {getIcon(artifact.type)}
                                 </div>
                                 <div className="flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <button
+                                        onClick={() => handleShare(artifact)}
+                                        className="p-2 text-muted hover:text-primary hover:bg-primary/10 rounded-lg transition-colors"
+                                        title="Share / Copy"
+                                    >
+                                        <Share2 size={16} />
+                                    </button>
+                                    <button
+                                        onClick={() => handleDownload(artifact)}
+                                        className="p-2 text-muted hover:text-primary hover:bg-primary/10 rounded-lg transition-colors"
+                                        title="Download"
+                                    >
+                                        <Download size={16} />
+                                    </button>
                                     <button
                                         onClick={() => deleteArtifact(artifact.id)}
                                         className="p-2 text-muted hover:text-danger hover:bg-danger/10 rounded-lg transition-colors"
