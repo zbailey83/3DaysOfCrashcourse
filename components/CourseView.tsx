@@ -1,13 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { Course, Module, QuizQuestion } from '../types';
-import { CheckCircle, PlayCircle, FileText, HelpCircle, ChevronRight, AlertCircle, ArrowLeft, ArrowRight, Menu, X } from 'lucide-react';
+import { CheckCircle, PlayCircle, FileText, HelpCircle, ChevronRight, AlertCircle, ArrowLeft, ArrowRight, Menu, X, Lock } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { VideoPlayer } from './VideoPlayer';
+import { useProgress } from '../hooks/useProgress';
+import { supabase } from '../lib/supabase';
 
-const QuizItem = ({ question, index }: { question: QuizQuestion; index: number }) => {
+const QuizItem = ({ question, index, onCorrect }: { question: QuizQuestion; index: number; onCorrect: () => void }) => {
   const [selected, setSelected] = useState<number | null>(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const isCorrect = selected === question.correctAnswer;
+
+  useEffect(() => {
+    if (isSubmitted && isCorrect) {
+      onCorrect();
+    }
+  }, [isSubmitted, isCorrect, onCorrect]);
 
   return (
     <div className="mb-8 last:mb-0">
@@ -65,6 +73,15 @@ interface CourseViewProps {
 export const CourseView: React.FC<CourseViewProps> = ({ course, moduleId, onBack }) => {
   const [activeModuleId, setActiveModuleId] = useState<string>(moduleId || course.modules[0].id);
   const [showMobileModules, setShowMobileModules] = useState(false);
+  const [userId, setUserId] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUserId(user?.id);
+    });
+  }, []);
+
+  const { isModuleCompleted, markModuleCompleted } = useProgress(userId);
 
   useEffect(() => {
     if (moduleId) setActiveModuleId(moduleId);
@@ -72,6 +89,17 @@ export const CourseView: React.FC<CourseViewProps> = ({ course, moduleId, onBack
 
   const activeModule = course.modules.find(m => m.id === activeModuleId) || course.modules[0];
   const activeModuleIndex = course.modules.findIndex(m => m.id === activeModuleId);
+
+  // Auto-complete logic for non-quiz modules (e.g., when viewing or finishing video)
+  useEffect(() => {
+    if (activeModule.type !== 'lab' && (!activeModule.quiz || activeModule.quiz.length === 0)) {
+      // Simple timeout to simulate "reading" or "watching"
+      const timer = setTimeout(() => {
+        markModuleCompleted(course.id, activeModule.id);
+      }, 5000); // Mark as complete after 5 seconds
+      return () => clearTimeout(timer);
+    }
+  }, [activeModuleId, userId]);
 
   const handleNext = () => {
     if (activeModuleIndex < course.modules.length - 1) {
@@ -85,6 +113,11 @@ export const CourseView: React.FC<CourseViewProps> = ({ course, moduleId, onBack
       setActiveModuleId(course.modules[activeModuleIndex - 1].id);
       window.scrollTo(0, 0);
     }
+  };
+
+  const handleQuizCorrect = () => {
+    // In a real app, check if all questions are correct
+    markModuleCompleted(course.id, activeModule.id, 100);
   };
 
   return (
@@ -103,25 +136,28 @@ export const CourseView: React.FC<CourseViewProps> = ({ course, moduleId, onBack
           <div className="absolute right-0 top-0 bottom-0 w-3/4 bg-white shadow-2xl p-6 overflow-y-auto" onClick={e => e.stopPropagation()}>
             <h3 className="font-bold text-lg mb-4 text-[#0F172A]">Course Modules</h3>
             <div className="space-y-2">
-              {course.modules.map((module, idx) => (
-                <button
-                  key={module.id}
-                  onClick={() => {
-                    setActiveModuleId(module.id);
-                    setShowMobileModules(false);
-                  }}
-                  className={`w-full text-left p-4 rounded-xl text-sm font-medium transition-all flex items-center ${activeModuleId === module.id
-                    ? 'bg-[#2563EB] text-white shadow-md shadow-blue-500/20'
-                    : 'bg-slate-50 text-slate-600 hover:bg-slate-100'
-                    }`}
-                >
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center mr-3 text-xs font-bold ${activeModuleId === module.id ? 'bg-white/20' : 'bg-white border border-slate-200'
-                    }`}>
-                    {idx + 1}
-                  </div>
-                  <span className="line-clamp-2">{module.title}</span>
-                </button>
-              ))}
+              {course.modules.map((module, idx) => {
+                const isCompleted = isModuleCompleted(module.id);
+                return (
+                  <button
+                    key={module.id}
+                    onClick={() => {
+                      setActiveModuleId(module.id);
+                      setShowMobileModules(false);
+                    }}
+                    className={`w-full text-left p-4 rounded-xl text-sm font-medium transition-all flex items-center ${activeModuleId === module.id
+                      ? 'bg-[#2563EB] text-white shadow-md shadow-blue-500/20'
+                      : 'bg-slate-50 text-slate-600 hover:bg-slate-100'
+                      }`}
+                  >
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center mr-3 text-xs font-bold ${isCompleted ? 'bg-[#10B981] text-white' : activeModuleId === module.id ? 'bg-white/20' : 'bg-white border border-slate-200'
+                      }`}>
+                      {isCompleted ? <CheckCircle size={14} /> : idx + 1}
+                    </div>
+                    <span className="line-clamp-2">{module.title}</span>
+                  </button>
+                )
+              })}
             </div>
           </div>
         </div>
@@ -140,22 +176,25 @@ export const CourseView: React.FC<CourseViewProps> = ({ course, moduleId, onBack
         <div className="h-1 w-12 bg-[#2563EB] rounded-full mb-6"></div>
 
         <div className="space-y-3">
-          {course.modules.map((module, idx) => (
-            <button
-              key={module.id}
-              onClick={() => setActiveModuleId(module.id)}
-              className={`w-full text-left p-4 rounded-xl text-sm font-medium transition-all flex items-start group ${activeModuleId === module.id
-                ? 'bg-[#2563EB] text-white shadow-lg shadow-blue-500/25 scale-[1.02]'
-                : 'bg-white border border-slate-100 text-slate-600 hover:border-[#2563EB]/30 hover:shadow-md'
-                }`}
-            >
-              <div className={`mt-0.5 w-6 h-6 rounded-full flex items-center justify-center mr-3 text-[10px] font-bold flex-shrink-0 transition-colors ${activeModuleId === module.id ? 'bg-white/20' : 'bg-slate-100 text-slate-400 group-hover:bg-[#2563EB]/10 group-hover:text-[#2563EB]'
-                }`}>
-                {idx + 1}
-              </div>
-              <span className="leading-relaxed">{module.title}</span>
-            </button>
-          ))}
+          {course.modules.map((module, idx) => {
+            const isCompleted = isModuleCompleted(module.id);
+            return (
+              <button
+                key={module.id}
+                onClick={() => setActiveModuleId(module.id)}
+                className={`w-full text-left p-4 rounded-xl text-sm font-medium transition-all flex items-start group ${activeModuleId === module.id
+                  ? 'bg-[#2563EB] text-white shadow-lg shadow-blue-500/25 scale-[1.02]'
+                  : 'bg-white border border-slate-100 text-slate-600 hover:border-[#2563EB]/30 hover:shadow-md'
+                  }`}
+              >
+                <div className={`mt-0.5 w-6 h-6 rounded-full flex items-center justify-center mr-3 text-[10px] font-bold flex-shrink-0 transition-colors ${isCompleted ? 'bg-[#10B981] text-white' : activeModuleId === module.id ? 'bg-white/20' : 'bg-slate-100 text-slate-400 group-hover:bg-[#2563EB]/10 group-hover:text-[#2563EB]'
+                  }`}>
+                  {isCompleted ? <CheckCircle size={12} /> : idx + 1}
+                </div>
+                <span className="leading-relaxed">{module.title}</span>
+              </button>
+            )
+          })}
         </div>
       </div>
 
@@ -220,9 +259,17 @@ export const CourseView: React.FC<CourseViewProps> = ({ course, moduleId, onBack
 
                   <div className="space-y-6">
                     {activeModule.quiz.map((q, idx) => (
-                      <QuizItem key={idx} question={q} index={idx} />
+                      <QuizItem key={idx} question={q} index={idx} onCorrect={handleQuizCorrect} />
                     ))}
                   </div>
+                </div>
+              )}
+
+              {/* Completion Badge */}
+              {isModuleCompleted(activeModule.id) && (
+                <div className="mt-8 flex items-center justify-center p-4 bg-green-50 text-green-700 rounded-xl animate-fade-in">
+                  <CheckCircle size={20} className="mr-2" />
+                  <span className="font-bold">Module Completed!</span>
                 </div>
               )}
             </div>

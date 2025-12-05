@@ -32,3 +32,39 @@ export interface GeneratedCampaign {
     }[];
     seoKeywords: string[];
 }
+
+export interface UserProfile {
+    id: string;
+    email: string;
+    full_name?: string;
+    avatar_url?: string;
+    created_at: string;
+}
+
+export interface UserProgress {
+    user_id: string;
+    course_id: string;
+    module_id: string;
+    completed: boolean;
+    score?: number; // For quizzes
+    completed_at: string;
+}
+
+export interface UserArtifact {
+    id: string;
+    user_id: string;
+    course_id?: string;
+    module_id?: string;
+    type: 'campaign' | 'image' | 'seo_analysis' | 'brand_voice';
+    title: string;
+    content: any; // JSON data
+    created_at: string;
+}
+
+export interface Badge {
+    id: string;
+    name: string;
+    description: string;
+    icon: string;
+    condition: (progress: UserProgress[], artifacts: UserArtifact[]) => boolean;
+}

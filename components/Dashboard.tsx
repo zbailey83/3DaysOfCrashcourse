@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Course } from '../types';
 import { ViewState } from '../App';
 import { PlayCircle, Clock, ArrowRight, Zap, PenTool, Image as ImageIcon, Search, BookOpen } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import { useProgress } from '../hooks/useProgress';
+import { useArtifacts } from '../hooks/useArtifacts';
+import { supabase } from '../lib/supabase';
+import { Badges } from './Badges';
 
 interface DashboardProps {
   courses: Course[];
@@ -17,11 +21,33 @@ const data = [
 ];
 
 export const Dashboard: React.FC<DashboardProps> = ({ courses, onNavigate }) => {
+  const [userId, setUserId] = useState<string | undefined>(undefined);
+  const [userProfile, setUserProfile] = useState<{ full_name: string } | null>(null);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUserId(user?.id);
+      if (user) {
+        // Fetch profile
+        supabase.from('profiles').select('full_name').eq('id', user.id).single()
+          .then(({ data }) => setUserProfile(data));
+      }
+    });
+  }, []);
+
+  const { getCourseProgress, progress } = useProgress(userId);
+  const { artifacts } = useArtifacts(userId);
+
+  // Calculate overall progress
+  const totalModules = courses.reduce((acc, course) => acc + course.modules.length, 0);
+  const completedModules = progress.filter(p => p.completed).length;
+  const overallProgress = totalModules > 0 ? Math.round((completedModules / totalModules) * 100) : 0;
+
   return (
     <div className="space-y-8 md:space-y-10 pb-10">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 animate-slide-up">
         <div>
-          <h1 className="text-4xl md:text-5xl font-display font-bold text-[#0F172A] mb-3">Hello, Alex</h1>
+          <h1 className="text-4xl md:text-5xl font-display font-bold text-[#0F172A] mb-3">Hello, {userProfile?.full_name || 'Creator'}</h1>
           <p className="text-[#64748B] text-lg font-light">Your creative journey continues today.</p>
         </div>
         <div className="hidden md:flex -space-x-3 hover:space-x-1 transition-all duration-300">
@@ -75,12 +101,12 @@ export const Dashboard: React.FC<DashboardProps> = ({ courses, onNavigate }) => 
             <div className="absolute bottom-0 left-0 w-32 h-32 bg-black/10 rounded-full -ml-10 -mb-10 blur-xl"></div>
 
             <h3 className="text-blue-100 font-medium mb-2 flex items-center relative z-10"><Zap className="w-4 h-4 mr-2 text-yellow-300" /> Overall Progress</h3>
-            <div className="text-5xl font-display font-bold mb-6 relative z-10">72%</div>
+            <div className="text-5xl font-display font-bold mb-6 relative z-10">{overallProgress}%</div>
 
             <div className="w-full bg-black/20 rounded-full h-3 mb-3 backdrop-blur-sm relative z-10">
-              <div className="bg-white h-3 rounded-full w-[72%] shadow-[0_0_10px_rgba(255,255,255,0.5)]"></div>
+              <div className="bg-white h-3 rounded-full shadow-[0_0_10px_rgba(255,255,255,0.5)] transition-all duration-1000" style={{ width: `${overallProgress}%` }}></div>
             </div>
-            <p className="text-sm text-blue-50 font-medium relative z-10">Level 4: Marketing Wizard</p>
+            <p className="text-sm text-blue-50 font-medium relative z-10">Level {Math.floor(overallProgress / 20) + 1}: {overallProgress > 80 ? 'Master' : overallProgress > 50 ? 'Advanced' : 'Beginner'}</p>
           </div>
 
           <div className="bg-white p-6 rounded-[24px] shadow-[0px_1px_3px_rgba(0,0,0,0.06),0px_4px_10px_rgba(0,0,0,0.04)] border border-slate-100 hover:shadow-md transition-shadow">
@@ -93,7 +119,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ courses, onNavigate }) => 
                 <h4 className="font-semibold text-[#0F172A] mb-1">Visual Asset Creation</h4>
                 <p className="text-xs text-[#64748B] mb-3">Module 2 • 15m remaining</p>
                 <button
-                  onClick={() => onNavigate({ type: 'course', courseId: 'marketing-ai-101', moduleId: 'm2-visuals' })}
+                  onClick={() => onNavigate({ type: 'course', courseId: 'day-1-foundation', moduleId: 'm3.1-image-prompt' })}
                   className="text-[#2563EB] text-sm font-bold hover:text-[#1D4ED8] transition-colors flex items-center group"
                 >
                   Resume <ArrowRight size={14} className="ml-1 transform group-hover:translate-x-1 transition-transform" />
@@ -104,38 +130,59 @@ export const Dashboard: React.FC<DashboardProps> = ({ courses, onNavigate }) => 
         </div>
       </div>
 
+      {/* Badges Section */}
+      <div className="animate-slide-up delay-150">
+        <Badges progress={progress} artifacts={artifacts} />
+      </div>
+
       {/* Courses Grid */}
       <div className="animate-slide-up delay-200">
         <h2 className="text-2xl font-display font-bold text-[#0F172A] mb-6">Active Courses</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-          {courses.map(course => (
-            <div key={course.id} className="group bg-white rounded-[24px] shadow-[0px_1px_3px_rgba(0,0,0,0.06),0px_4px_10px_rgba(0,0,0,0.04)] overflow-hidden border border-slate-100 hover:shadow-[0px_8px_20px_rgba(37,99,235,0.1)] hover:-translate-y-1 transition-all duration-300">
-              <div className="h-48 overflow-hidden relative">
-                <img src={course.thumbnail} alt={course.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A]/80 to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
-                <div className="absolute bottom-4 left-4 flex gap-2">
-                  {course.tags.map(tag => (
-                    <span key={tag} className="text-[10px] uppercase font-bold px-3 py-1 bg-white/90 backdrop-blur-md text-[#0F172A] rounded-full shadow-sm">{tag}</span>
-                  ))}
+          {courses.map(course => {
+            const courseProgress = getCourseProgress(course.id, course.modules.length);
+            return (
+              <div key={course.id} className="group bg-white rounded-[24px] shadow-[0px_1px_3px_rgba(0,0,0,0.06),0px_4px_10px_rgba(0,0,0,0.04)] overflow-hidden border border-slate-100 hover:shadow-[0px_8px_20px_rgba(37,99,235,0.1)] hover:-translate-y-1 transition-all duration-300">
+                <div className="h-48 overflow-hidden relative">
+                  <img src={course.thumbnail} alt={course.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A]/80 to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
+                  <div className="absolute bottom-4 left-4 flex gap-2">
+                    {course.tags.map(tag => (
+                      <span key={tag} className="text-[10px] uppercase font-bold px-3 py-1 bg-white/90 backdrop-blur-md text-[#0F172A] rounded-full shadow-sm">{tag}</span>
+                    ))}
+                  </div>
+                </div>
+                <div className="p-7">
+                  <div className="flex justify-between items-start mb-3">
+                    <h3 className="text-xl font-display font-bold text-[#0F172A] leading-tight group-hover:text-[#2563EB] transition-colors">{course.title}</h3>
+                    {courseProgress > 0 && (
+                      <div className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-50 text-[#2563EB] text-xs font-bold">
+                        {courseProgress}%
+                      </div>
+                    )}
+                  </div>
+                  <p className="text-[#64748B] text-sm mb-6 leading-relaxed line-clamp-2">{course.description}</p>
+
+                  {/* Progress Bar for Course */}
+                  <div className="w-full bg-slate-100 rounded-full h-1.5 mb-6 overflow-hidden">
+                    <div className="bg-[#2563EB] h-full rounded-full transition-all duration-1000" style={{ width: `${courseProgress}%` }}></div>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-5 border-t border-dashed border-slate-100">
+                    <span className="text-xs text-[#94A3B8] font-semibold flex items-center">
+                      <PlayCircle size={14} className="mr-1" /> {course.modules.length} Modules
+                    </span>
+                    <button
+                      onClick={() => onNavigate({ type: 'course', courseId: course.id })}
+                      className="flex items-center text-white bg-[#0F172A] px-5 py-2.5 rounded-full font-semibold text-sm group-hover:bg-[#2563EB] transition-colors shadow-lg shadow-black/5 group-hover:shadow-blue-500/20"
+                    >
+                      {courseProgress > 0 ? 'Continue' : 'Start Learning'} <ArrowRight size={16} className="ml-2" />
+                    </button>
+                  </div>
                 </div>
               </div>
-              <div className="p-7">
-                <h3 className="text-xl font-display font-bold text-[#0F172A] mb-3 leading-tight group-hover:text-[#2563EB] transition-colors">{course.title}</h3>
-                <p className="text-[#64748B] text-sm mb-6 leading-relaxed line-clamp-2">{course.description}</p>
-                <div className="flex items-center justify-between pt-5 border-t border-dashed border-slate-100">
-                  <span className="text-xs text-[#94A3B8] font-semibold flex items-center">
-                    <PlayCircle size={14} className="mr-1" /> {course.modules.length} Modules
-                  </span>
-                  <button
-                    onClick={() => onNavigate({ type: 'course', courseId: course.id })}
-                    className="flex items-center text-white bg-[#0F172A] px-5 py-2.5 rounded-full font-semibold text-sm group-hover:bg-[#2563EB] transition-colors shadow-lg shadow-black/5 group-hover:shadow-blue-500/20"
-                  >
-                    Start Learning <ArrowRight size={16} className="ml-2" />
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
       </div>
 

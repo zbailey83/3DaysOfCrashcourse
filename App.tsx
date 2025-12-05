@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Sidebar } from './components/Sidebar';
 import { Dashboard } from './components/Dashboard';
 import { CourseView } from './components/CourseView';
@@ -6,18 +6,40 @@ import { CampaignGenerator } from './components/tools/CampaignGenerator';
 import { ImageGenLab } from './components/tools/ImageGenLab';
 import { SeoAnalyzer } from './components/tools/SeoAnalyzer';
 import { BrandVoiceDNA } from './components/tools/BrandVoiceDNA';
+import { Workspace } from './components/Workspace';
+import { Profile } from './components/Profile';
+import { Auth } from './components/Auth';
 import { COURSES } from './constants';
 import { Menu } from 'lucide-react';
+import { supabase } from './lib/supabase';
+import { Session } from '@supabase/supabase-js';
 
 // Simple view router state type
 export type ViewState =
   | { type: 'dashboard' }
+  | { type: 'workspace' }
+  | { type: 'profile' }
   | { type: 'course'; courseId: string; moduleId?: string }
   | { type: 'tool'; toolName: 'campaign' | 'image' | 'seo' | 'brand-voice'; action?: 'openLibrary' };
 
 const App: React.FC = () => {
+  const [session, setSession] = useState<Session | null>(null);
   const [currentView, setCurrentView] = useState<ViewState>({ type: 'dashboard' });
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   const handleNavigate = (view: ViewState) => {
     setCurrentView(view);
@@ -31,10 +53,14 @@ const App: React.FC = () => {
     switch (currentView.type) {
       case 'dashboard':
         return <Dashboard onNavigate={handleNavigate} courses={COURSES} />;
+      case 'workspace':
+        return <Workspace />;
+      case 'profile':
+        return <Profile />;
       case 'course':
         const course = COURSES.find(c => c.id === currentView.courseId);
         if (!course) return <div>Course not found</div>;
-        return <CourseView course={course} initialModuleId={currentView.moduleId} />;
+        return <CourseView course={course} moduleId={currentView.moduleId} onBack={() => handleNavigate({ type: 'dashboard' })} />;
       case 'tool':
         switch (currentView.toolName) {
           case 'campaign': return <CampaignGenerator />;
@@ -47,6 +73,10 @@ const App: React.FC = () => {
         return <Dashboard onNavigate={handleNavigate} courses={COURSES} />;
     }
   };
+
+  if (!session) {
+    return <Auth />;
+  }
 
   return (
     <div className="flex h-screen bg-[#F8FAFC] text-[#0F172A] overflow-hidden selection:bg-[#2563EB] selection:text-white">
