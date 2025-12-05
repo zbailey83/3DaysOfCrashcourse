@@ -87,18 +87,20 @@ export const generateImage = async (prompt: string) => {
   throw new Error("No image generated");
 };
 
-export const analyzeSeoText = async (text: string) => {
+export const analyzeSeoText = async (text: string, targetKeyword?: string) => {
   const client = getClient();
 
   const prompt = `
-    Analyze the following marketing copy for SEO:
+    Analyze the following marketing copy for SEO${targetKeyword ? ` focusing on the target keyword: "${targetKeyword}"` : ''}:
     "${text}"
 
     Return a JSON object with:
     - "score": number (1-100)
     - "sentiment": string (Positive, Neutral, Negative)
-    - "keywords_detected": array of strings
+    - "keywords_detected": array of strings (top 5 keywords found)
+    - "keyword_density": string (e.g., "1.5%" - calculated for the target keyword if provided, or the most frequent word)
     - "improvements": array of strings (suggestions to improve SEO/readability)
+    - "suggested_keywords": array of strings (5 related long-tail keywords to consider adding)
   `;
 
   const response = await client.models.generateContent({

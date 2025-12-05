@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Course, Module, QuizQuestion } from '../types';
 import { CheckCircle, PlayCircle, FileText, HelpCircle, ChevronRight, AlertCircle, ArrowLeft, ArrowRight, Menu, X } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+import { VideoPlayer } from './VideoPlayer';
 
 const QuizItem = ({ question, index }: { question: QuizQuestion; index: number }) => {
   const [selected, setSelected] = useState<number | null>(null);
@@ -110,8 +111,8 @@ export const CourseView: React.FC<CourseViewProps> = ({ course, moduleId, onBack
                     setShowMobileModules(false);
                   }}
                   className={`w-full text-left p-4 rounded-xl text-sm font-medium transition-all flex items-center ${activeModuleId === module.id
-                      ? 'bg-[#2563EB] text-white shadow-md shadow-blue-500/20'
-                      : 'bg-slate-50 text-slate-600 hover:bg-slate-100'
+                    ? 'bg-[#2563EB] text-white shadow-md shadow-blue-500/20'
+                    : 'bg-slate-50 text-slate-600 hover:bg-slate-100'
                     }`}
                 >
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center mr-3 text-xs font-bold ${activeModuleId === module.id ? 'bg-white/20' : 'bg-white border border-slate-200'
@@ -144,8 +145,8 @@ export const CourseView: React.FC<CourseViewProps> = ({ course, moduleId, onBack
               key={module.id}
               onClick={() => setActiveModuleId(module.id)}
               className={`w-full text-left p-4 rounded-xl text-sm font-medium transition-all flex items-start group ${activeModuleId === module.id
-                  ? 'bg-[#2563EB] text-white shadow-lg shadow-blue-500/25 scale-[1.02]'
-                  : 'bg-white border border-slate-100 text-slate-600 hover:border-[#2563EB]/30 hover:shadow-md'
+                ? 'bg-[#2563EB] text-white shadow-lg shadow-blue-500/25 scale-[1.02]'
+                : 'bg-white border border-slate-100 text-slate-600 hover:border-[#2563EB]/30 hover:shadow-md'
                 }`}
             >
               <div className={`mt-0.5 w-6 h-6 rounded-full flex items-center justify-center mr-3 text-[10px] font-bold flex-shrink-0 transition-colors ${activeModuleId === module.id ? 'bg-white/20' : 'bg-slate-100 text-slate-400 group-hover:bg-[#2563EB]/10 group-hover:text-[#2563EB]'
@@ -191,6 +192,15 @@ export const CourseView: React.FC<CourseViewProps> = ({ course, moduleId, onBack
 
             {/* Content Body */}
             <div className="p-8 md:p-12">
+              {activeModule.type === 'video' && (
+                <div className="mb-12">
+                  <VideoPlayer
+                    title={activeModule.title}
+                    duration={activeModule.duration}
+                    thumbnail={course.thumbnail}
+                  />
+                </div>
+              )}
               <div className="prose prose-slate prose-lg max-w-none mb-12 prose-headings:font-display prose-headings:font-bold prose-a:text-[#2563EB] prose-img:rounded-2xl">
                 <ReactMarkdown>{activeModule.content}</ReactMarkdown>
               </div>
