@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { analyzeSeoText } from '../../services/geminiService';
-import { Loader2, Search, ThumbsUp, ArrowRight, CheckCircle, Target, Hash, Zap } from 'lucide-react';
+import { supabase } from '../../lib/supabase';
+import { useArtifacts } from '../../hooks/useArtifacts';
+import { Loader2, Search, ThumbsUp, ArrowRight, CheckCircle, Target, Hash, Zap, Save } from 'lucide-react';
 
 interface AnalysisResult {
   score: number;
@@ -15,7 +17,36 @@ export const SeoAnalyzer: React.FC = () => {
   const [text, setText] = useState('');
   const [targetKeyword, setTargetKeyword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [result, setResult] = useState<AnalysisResult | null>(null);
+  const [userId, setUserId] = useState<string | undefined>(undefined);
+
+  const { saveArtifact } = useArtifacts(userId);
+
+  React.useEffect(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUserId(user?.id);
+    });
+  }, []);
+
+  const handleSave = async () => {
+    if (!userId || !result) return;
+    setSaving(true);
+    try {
+      await saveArtifact({
+        user_id: userId,
+        type: 'seo_analysis',
+        title: `SEO Report - ${targetKeyword || 'Untitled'}`,
+        content: { ...result, original_text: text },
+      });
+      alert('Report saved to workspace!');
+    } catch (e) {
+      console.error(e);
+      alert('Failed to save report.');
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const handleAnalyze = async () => {
     if (!text) return;
@@ -82,89 +113,101 @@ export const SeoAnalyzer: React.FC = () => {
         </div>
 
         {result && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 animate-fade-in">
-            {/* Score Card */}
-            <div className="glass-card p-8 rounded-[24px] text-center flex flex-col items-center justify-center">
-              <h3 className="text-muted text-xs font-bold uppercase tracking-widest mb-6">SEO Score</h3>
-              <div className="relative inline-flex items-center justify-center mb-6">
-                <svg className="w-40 h-40 transform -rotate-90">
-                  <circle className="text-white/10" strokeWidth="8" stroke="currentColor" fill="transparent" r="70" cx="80" cy="80" />
-                  <circle
-                    className={result.score > 70 ? "text-success" : result.score > 40 ? "text-yellow-400" : "text-danger"}
-                    strokeWidth="8"
-                    strokeDasharray={440}
-                    strokeDashoffset={440 - (440 * result.score) / 100}
-                    strokeLinecap="round"
-                    stroke="currentColor"
-                    fill="transparent"
-                    r="70"
-                    cx="80"
-                    cy="80"
-                    style={{ transition: 'stroke-dashoffset 1.5s ease-out' }}
-                  />
-                </svg>
-                <div className="absolute flex flex-col items-center">
-                  <span className="text-4xl font-display font-bold text-white">{result.score}</span>
-                  <span className="text-xs font-medium text-muted">/ 100</span>
-                </div>
-              </div>
-              <div className="flex gap-2">
-                <div className="inline-block px-4 py-1.5 bg-white/5 rounded-full text-xs font-bold text-muted uppercase tracking-wide border border-white/10">
-                  {result.sentiment} Tone
-                </div>
-                {result.keyword_density && (
-                  <div className="inline-block px-4 py-1.5 bg-primary/10 rounded-full text-xs font-bold text-primary uppercase tracking-wide border border-primary/20">
-                    {result.keyword_density} Density
-                  </div>
-                )}
-              </div>
+          <div className="space-y-4 animate-fade-in">
+            <div className="flex justify-end">
+              <button
+                onClick={handleSave}
+                disabled={saving}
+                className="bg-primary/10 text-primary px-4 py-2 rounded-xl text-sm font-bold hover:bg-primary/20 transition-colors flex items-center border border-primary/20"
+              >
+                {saving ? <Loader2 size={16} className="animate-spin mr-2" /> : <Save size={16} className="mr-2" />}
+                Save Report
+              </button>
             </div>
-
-            {/* Suggestions */}
-            <div className="glass-card p-8 rounded-[24px] md:col-span-2 flex flex-col">
-              <h3 className="font-display font-bold text-text-primary mb-6 flex items-center text-xl">
-                <ThumbsUp className="mr-3 text-primary" size={20} />
-                Actionable Improvements
-              </h3>
-              <ul className="space-y-4 flex-1 mb-8">
-                {result.improvements.map((imp, i) => (
-                  <li key={i} className="flex items-start text-text-secondary leading-relaxed p-3 rounded-xl hover:bg-white/5 transition-colors group cursor-default">
-                    <div className="mt-1 mr-3 min-w-[20px] h-5 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                      <ArrowRight size={12} className="text-primary" />
-                    </div>
-                    {imp}
-                  </li>
-                ))}
-              </ul>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-white/10">
-                <div>
-                  <h4 className="text-xs font-bold text-muted uppercase tracking-wider mb-4 flex items-center"><Target size={14} className="mr-2" /> Keywords Detected</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {result.keywords.map((k, i) => (
-                      <span key={i} className="flex items-center px-3 py-1.5 bg-success/10 text-white rounded-lg border border-success/20 text-sm font-medium hover:bg-success/20 transition-colors cursor-default">
-                        <CheckCircle size={12} className="mr-1.5 text-success" /> {k}
-                      </span>
-                    ))}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {/* Score Card */}
+              <div className="glass-card p-8 rounded-[24px] text-center flex flex-col items-center justify-center">
+                <h3 className="text-muted text-xs font-bold uppercase tracking-widest mb-6">SEO Score</h3>
+                <div className="relative inline-flex items-center justify-center mb-6">
+                  <svg className="w-40 h-40 transform -rotate-90">
+                    <circle className="text-white/10" strokeWidth="8" stroke="currentColor" fill="transparent" r="70" cx="80" cy="80" />
+                    <circle
+                      className={result.score > 70 ? "text-success" : result.score > 40 ? "text-yellow-400" : "text-danger"}
+                      strokeWidth="8"
+                      strokeDasharray={440}
+                      strokeDashoffset={440 - (440 * result.score) / 100}
+                      strokeLinecap="round"
+                      stroke="currentColor"
+                      fill="transparent"
+                      r="70"
+                      cx="80"
+                      cy="80"
+                      style={{ transition: 'stroke-dashoffset 1.5s ease-out' }}
+                    />
+                  </svg>
+                  <div className="absolute flex flex-col items-center">
+                    <span className="text-4xl font-display font-bold text-white">{result.score}</span>
+                    <span className="text-xs font-medium text-muted">/ 100</span>
                   </div>
                 </div>
-                {result.suggested_keywords && result.suggested_keywords.length > 0 && (
+                <div className="flex gap-2">
+                  <div className="inline-block px-4 py-1.5 bg-white/5 rounded-full text-xs font-bold text-muted uppercase tracking-wide border border-white/10">
+                    {result.sentiment} Tone
+                  </div>
+                  {result.keyword_density && (
+                    <div className="inline-block px-4 py-1.5 bg-primary/10 rounded-full text-xs font-bold text-primary uppercase tracking-wide border border-primary/20">
+                      {result.keyword_density} Density
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Suggestions */}
+              <div className="glass-card p-8 rounded-[24px] md:col-span-2 flex flex-col">
+                <h3 className="font-display font-bold text-text-primary mb-6 flex items-center text-xl">
+                  <ThumbsUp className="mr-3 text-primary" size={20} />
+                  Actionable Improvements
+                </h3>
+                <ul className="space-y-4 flex-1 mb-8">
+                  {result.improvements.map((imp, i) => (
+                    <li key={i} className="flex items-start text-text-secondary leading-relaxed p-3 rounded-xl hover:bg-white/5 transition-colors group cursor-default">
+                      <div className="mt-1 mr-3 min-w-[20px] h-5 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                        <ArrowRight size={12} className="text-primary" />
+                      </div>
+                      {imp}
+                    </li>
+                  ))}
+                </ul>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-white/10">
                   <div>
-                    <h4 className="text-xs font-bold text-muted uppercase tracking-wider mb-4 flex items-center"><Zap size={14} className="mr-2" /> Suggested Keywords</h4>
+                    <h4 className="text-xs font-bold text-muted uppercase tracking-wider mb-4 flex items-center"><Target size={14} className="mr-2" /> Keywords Detected</h4>
                     <div className="flex flex-wrap gap-2">
-                      {result.suggested_keywords.map((k, i) => (
-                        <span key={i} className="flex items-center px-3 py-1.5 bg-yellow-500/10 text-white rounded-lg border border-yellow-500/20 text-sm font-medium hover:bg-yellow-500/20 transition-colors cursor-default">
-                          <Hash size={12} className="mr-1.5 text-yellow-500" /> {k}
+                      {result.keywords.map((k, i) => (
+                        <span key={i} className="flex items-center px-3 py-1.5 bg-success/10 text-white rounded-lg border border-success/20 text-sm font-medium hover:bg-success/20 transition-colors cursor-default">
+                          <CheckCircle size={12} className="mr-1.5 text-success" /> {k}
                         </span>
                       ))}
                     </div>
                   </div>
-                )}
+                  {result.suggested_keywords && result.suggested_keywords.length > 0 && (
+                    <div>
+                      <h4 className="text-xs font-bold text-muted uppercase tracking-wider mb-4 flex items-center"><Zap size={14} className="mr-2" /> Suggested Keywords</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {result.suggested_keywords.map((k, i) => (
+                          <span key={i} className="flex items-center px-3 py-1.5 bg-yellow-500/10 text-white rounded-lg border border-yellow-500/20 text-sm font-medium hover:bg-yellow-500/20 transition-colors cursor-default">
+                            <Hash size={12} className="mr-1.5 text-yellow-500" /> {k}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
         )}
       </div>
-    </div>
+    </div >
   );
 };

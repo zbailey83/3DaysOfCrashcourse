@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { generateImage } from '../../services/geminiService';
-import { Loader2, Image as ImageIcon, Wand2, AlertTriangle, Sparkles, BookOpen, Save, Search, X, Tag, Filter, Trash2, Sliders, Camera, Sun, Palette, Hash } from 'lucide-react';
+import { supabase } from '../../lib/supabase';
+import { useArtifacts } from '../../hooks/useArtifacts';
+import { Loader2, Image as ImageIcon, Wand2, AlertTriangle, Sparkles, BookOpen, Save, Search, X, Tag, Filter, Trash2, Sliders, Camera, Sun, Palette, Hash, Download } from 'lucide-react';
 
 interface PromptEntry {
   id: string;
@@ -69,8 +71,10 @@ export const ImageGenLab: React.FC<ImageGenLabProps> = ({ initialAction }) => {
   const [seed, setSeed] = useState<string>('');
 
   const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | undefined>(undefined);
 
   // Library State
   const [isLibraryOpen, setIsLibraryOpen] = useState(false);
@@ -78,8 +82,14 @@ export const ImageGenLab: React.FC<ImageGenLabProps> = ({ initialAction }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
 
-  // Handle Initial Action (Deep Linking)
+  const { saveArtifact } = useArtifacts(userId);
+
+  // Handle Initial Action (Deep Linking) & Auth
   useEffect(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUserId(user?.id);
+    });
+
     if (initialAction === 'openLibrary') {
       setIsLibraryOpen(true);
     }
@@ -144,6 +154,50 @@ export const ImageGenLab: React.FC<ImageGenLabProps> = ({ initialAction }) => {
   const handleDeletePrompt = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
     setLibraryPrompts(prev => prev.filter(p => p.id !== id));
+  };
+
+  const handleSaveToWorkspace = async () => {
+    if (!generatedImage || !userId) return;
+    setSaving(true);
+    try {
+      // Convert base64 to blob
+      const base64Data = generatedImage.split(',')[1];
+      const byteCharacters = atob(base64Data);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: 'image/png' });
+
+      const fileName = `generated/${userId}/${Date.now()}.png`;
+
+      // Upload to Supabase
+      const { error: uploadError } = await supabase.storage
+        .from('avatars')
+        .upload(fileName, blob, { contentType: 'image/png' });
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('avatars')
+        .getPublicUrl(fileName);
+
+      // Save artifact
+      await saveArtifact({
+        user_id: userId,
+        type: 'image',
+        title: prompt || 'Generated Image',
+        content: { url: publicUrl },
+      });
+
+      alert('Image saved to workspace!');
+    } catch (e: any) {
+      console.error(e);
+      alert(`Failed to save image: ${e.message}`);
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -297,7 +351,19 @@ export const ImageGenLab: React.FC<ImageGenLabProps> = ({ initialAction }) => {
               />
               <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex justify-between items-end">
                 <p className="text-white/90 text-sm font-medium line-clamp-2 w-3/4">{prompt}</p>
-                <button className="bg-white/20 backdrop-blur-md text-white px-4 py-2 rounded-full text-xs font-bold hover:bg-white hover:text-black transition-colors">Download</button>
+                <div className="flex space-x-2">
+                  <a href={generatedImage} download={`generated-image-${Date.now()}.png`} className="bg-white/20 backdrop-blur-md text-white px-4 py-2 rounded-full text-xs font-bold hover:bg-white hover:text-black transition-colors flex items-center">
+                    <Download size={14} className="mr-1" /> Download
+                  </a>
+                  <button
+                    onClick={handleSaveToWorkspace}
+                    disabled={saving}
+                    className="bg-primary/80 backdrop-blur-md text-white px-4 py-2 rounded-full text-xs font-bold hover:bg-primary transition-colors flex items-center"
+                  >
+                    {saving ? <Loader2 size={14} className="animate-spin mr-1" /> : <Save size={14} className="mr-1" />}
+                    Save to Workspace
+                  </button>
+                </div>
               </div>
             </div>
           ) : error ? (

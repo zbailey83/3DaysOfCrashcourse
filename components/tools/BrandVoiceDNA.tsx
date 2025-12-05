@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Sliders, Save, FileText, Sparkles, Copy } from 'lucide-react';
+import { supabase } from '../../lib/supabase';
+import { useArtifacts } from '../../hooks/useArtifacts';
+import { Sliders, Save, FileText, Sparkles, Copy, Loader2 } from 'lucide-react';
 
 export const BrandVoiceDNA: React.FC = () => {
     const [sliders, setSliders] = useState({
@@ -13,6 +15,35 @@ export const BrandVoiceDNA: React.FC = () => {
     const [powerWords, setPowerWords] = useState('');
     const [neverSay, setNeverSay] = useState('');
     const [generatedBrief, setGeneratedBrief] = useState<string | null>(null);
+    const [saving, setSaving] = useState(false);
+    const [userId, setUserId] = useState<string | undefined>(undefined);
+
+    const { saveArtifact } = useArtifacts(userId);
+
+    React.useEffect(() => {
+        supabase.auth.getUser().then(({ data: { user } }) => {
+            setUserId(user?.id);
+        });
+    }, []);
+
+    const handleSave = async () => {
+        if (!userId || !generatedBrief) return;
+        setSaving(true);
+        try {
+            await saveArtifact({
+                user_id: userId,
+                type: 'brand_voice',
+                title: 'Brand Voice Brief',
+                content: { brief: generatedBrief, sliders, powerWords, neverSay },
+            });
+            alert('Brand Voice saved to workspace!');
+        } catch (e) {
+            console.error(e);
+            alert('Failed to save.');
+        } finally {
+            setSaving(false);
+        }
+    };
 
     const handleSliderChange = (key: keyof typeof sliders, value: number) => {
         setSliders(prev => ({ ...prev, [key]: value }));
@@ -131,9 +162,19 @@ This brand aims for a balance defined by the sliders above. Content should utili
                             <h3 className="font-display font-bold text-text-primary flex items-center text-xl">
                                 <Save className="mr-3 text-secondary" size={20} /> Generated Brief
                             </h3>
-                            <button className="text-muted hover:text-secondary transition-colors p-2 hover:bg-white/5 rounded-full">
-                                <Copy size={18} />
-                            </button>
+                            <div className="flex items-center space-x-2">
+                                <button
+                                    onClick={handleSave}
+                                    disabled={saving}
+                                    className="text-muted hover:text-secondary transition-colors p-2 hover:bg-white/5 rounded-full"
+                                    title="Save to Workspace"
+                                >
+                                    {saving ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />}
+                                </button>
+                                <button className="text-muted hover:text-secondary transition-colors p-2 hover:bg-white/5 rounded-full" title="Copy to Clipboard">
+                                    <Copy size={18} />
+                                </button>
+                            </div>
                         </div>
                         <div className="bg-white/5 p-6 rounded-2xl text-sm font-mono whitespace-pre-wrap text-text-secondary border border-transparent hover:border-secondary/10 transition-colors leading-relaxed">
                             {generatedBrief}

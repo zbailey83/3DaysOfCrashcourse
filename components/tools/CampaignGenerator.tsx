@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { generateCampaignContent } from '../../services/geminiService';
 import { GeneratedCampaign } from '../../types';
-import { Loader2, Copy, Share2, Layout, Video, Hash, Sparkles, Calendar, Briefcase, Target, Megaphone } from 'lucide-react';
+import { supabase } from '../../lib/supabase';
+import { useArtifacts } from '../../hooks/useArtifacts';
+import { Loader2, Copy, Share2, Layout, Video, Hash, Sparkles, Calendar, Briefcase, Target, Megaphone, Save } from 'lucide-react';
 
 interface CalendarDay {
   day: string;
@@ -25,8 +27,46 @@ export const CampaignGenerator: React.FC = () => {
   // Generator State
   const [mode, setMode] = useState<'ad' | 'calendar'>('ad');
   const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [adResult, setAdResult] = useState<GeneratedCampaign | null>(null);
   const [calendarResult, setCalendarResult] = useState<GeneratedCalendar | null>(null);
+  const [userId, setUserId] = useState<string | undefined>(undefined);
+
+  const { saveArtifact } = useArtifacts(userId);
+
+  React.useEffect(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUserId(user?.id);
+    });
+  }, []);
+
+  const handleSave = async () => {
+    if (!userId) return;
+    setSaving(true);
+    try {
+      if (mode === 'ad' && adResult) {
+        await saveArtifact({
+          user_id: userId,
+          type: 'campaign',
+          title: `${businessName || 'Untitled'} - Ad Campaign`,
+          content: adResult,
+        });
+      } else if (mode === 'calendar' && calendarResult) {
+        await saveArtifact({
+          user_id: userId,
+          type: 'campaign',
+          title: `${businessName || 'Untitled'} - Content Calendar`,
+          content: calendarResult,
+        });
+      }
+      alert('Saved to workspace!');
+    } catch (e) {
+      console.error(e);
+      alert('Failed to save.');
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -182,6 +222,16 @@ export const CampaignGenerator: React.FC = () => {
         {/* Ad Result View */}
         {adResult && mode === 'ad' && (
           <div className="animate-fade-in space-y-6">
+            <div className="flex justify-end">
+              <button
+                onClick={handleSave}
+                disabled={saving}
+                className="bg-primary/10 text-primary px-4 py-2 rounded-xl text-sm font-bold hover:bg-primary/20 transition-colors flex items-center border border-primary/20"
+              >
+                {saving ? <Loader2 size={16} className="animate-spin mr-2" /> : <Save size={16} className="mr-2" />}
+                Save Campaign
+              </button>
+            </div>
             {/* Script Card */}
             <div className="glass-card p-8 rounded-[24px] group hover:border-primary/30 transition-all hover:shadow-glow duration-300">
               <div className="flex items-center justify-between mb-6">
@@ -223,6 +273,16 @@ export const CampaignGenerator: React.FC = () => {
         {/* Calendar Result View */}
         {calendarResult && mode === 'calendar' && (
           <div className="animate-fade-in space-y-6">
+            <div className="flex justify-end">
+              <button
+                onClick={handleSave}
+                disabled={saving}
+                className="bg-primary/10 text-primary px-4 py-2 rounded-xl text-sm font-bold hover:bg-primary/20 transition-colors flex items-center border border-primary/20"
+              >
+                {saving ? <Loader2 size={16} className="animate-spin mr-2" /> : <Save size={16} className="mr-2" />}
+                Save Calendar
+              </button>
+            </div>
             <div className="glass-card p-8 rounded-[24px]">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="font-display font-bold text-text-primary flex items-center text-xl"><Calendar className="mr-3 text-primary" size={20} /> 7-Day Content Plan</h3>
