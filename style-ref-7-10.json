@@ -1,0 +1,545 @@
+{
+  "styles": [
+    {
+      "id": 6,
+      "name": "Bento Grid Layouts (Modular Card Systems)",
+      "aesthetic": "structured, modular, dynamic",
+      "category": "bento-grid",
+      "description": "A flexible, tile-based layout system inspired by Japanese bento boxes. Features modular cards of varying sizes arranged in an organized grid, creating visual hierarchy while maintaining structure. Perfect for showcasing multiple features or content types simultaneously.",
+      "colors": {
+        "background": {
+          "primary": "#fafafa",
+          "secondary": "#ffffff",
+          "alternative": "#f5f5f7"
+        },
+        "cards": {
+          "background": "#ffffff",
+          "alternative_fills": ["#f8f9fa", "#f0f4f8", "accent color at 5% opacity"]
+        },
+        "palette": {
+          "type": "two-tone with accent",
+          "base_dark": "#1a1a1a",
+          "base_light": "#f5f5f5",
+          "accent_color": "#0066ff",
+          "accent_alternatives": ["#ff3366", "#00cc88", "#ff6b35", "#7c3aed"]
+        },
+        "borders": {
+          "color": "#e5e5e5",
+          "width": "1px",
+          "style": "solid or subtle shadow"
+        }
+      },
+      "typography": {
+        "headings": {
+          "family": "modern sans-serif (e.g., 'Inter', 'Plus Jakarta Sans', 'Satoshi')",
+          "weight": "700-800",
+          "size": "24-48px depending on card size",
+          "color": "#1a1a1a",
+          "style": "bold but minimal",
+          "line_height": "1.2"
+        },
+        "body": {
+          "family": "same as headings for consistency",
+          "weight": "400-500",
+          "size": "14-16px",
+          "line_height": "1.6",
+          "color": "#4a4a4a"
+        },
+        "labels": {
+          "weight": "600",
+          "size": "12-14px",
+          "transform": "uppercase",
+          "letter_spacing": "0.05em",
+          "color": "#6a6a6a"
+        }
+      },
+      "grid_system": {
+        "structure": "3×3 base grid (9 cells)",
+        "variations": ["2×2", "4×4", "3×4", "responsive collapse to 1-2 columns"],
+        "gap": "16-24px between cards",
+        "card_spans": {
+          "small": "1×1 cell (for icons, KPIs, small testimonials)",
+          "medium": "2×1 or 1×2 cells (for features, medium content)",
+          "large": "2×2 cells (for hero feature, large screenshots)",
+          "wide": "3×1 cells (for horizontal content)",
+          "tall": "1×3 cells (for vertical content)"
+        },
+        "flexibility": "cards can span multiple cells for emphasis"
+      },
+      "components": {
+        "cards": {
+          "border_radius": "12-16px",
+          "padding": "24-32px",
+          "shadow": {
+            "default": "0 2px 8px rgba(0, 0, 0, 0.04)",
+            "hover": "0 8px 24px rgba(0, 0, 0, 0.08)"
+          },
+          "border": "1px solid #e5e5e5 (optional alternative to shadow)",
+          "background_variations": [
+            "white with subtle shadow",
+            "light gray fill",
+            "accent color tint",
+            "image background with overlay"
+          ]
+        },
+        "card_types": {
+          "hero_feature": {
+            "span": "2×2 or 3×2",
+            "content": "large heading, description, CTA",
+            "media": "product screenshot or illustration"
+          },
+          "testimonial": {
+            "span": "1×1 or 2×1",
+            "content": "quote, avatar, name, company"
+          },
+          "kpi_stat": {
+            "span": "1×1",
+            "content": "large number, label, small icon"
+          },
+          "product_screenshot": {
+            "span": "2×2",
+            "content": "image with subtle border/shadow"
+          },
+          "feature_highlight": {
+            "span": "1×1 or 2×1",
+            "content": "icon, heading, brief description"
+          }
+        }
+      },
+      "layout": {
+        "type": "responsive desktop-first",
+        "container_width": "1200-1440px max",
+        "breakpoints": {
+          "desktop": "3×3 or 4×3 grid",
+          "tablet": "2×n grid",
+          "mobile": "1×n stacked cards"
+        },
+        "whitespace": {
+          "around_grid": "40-80px padding",
+          "between_cards": "16-24px gap",
+          "within_cards": "24-32px padding"
+        }
+      },
+      "effects": {
+        "micro_interactions": {
+          "hover_lift": {
+            "transform": "translateY(-4px)",
+            "duration": "200ms",
+            "easing": "cubic-bezier(0.4, 0, 0.2, 1)"
+          },
+          "hover_scale": {
+            "transform": "scale(1.02)",
+            "duration": "200ms",
+            "easing": "ease-out"
+          },
+          "hover_glow": {
+            "shadow": "0 8px 24px rgba(accent-color, 0.12)",
+            "border": "accent color at 40% opacity"
+          }
+        },
+        "animations": {
+          "card_entrance": "staggered fade-in with slight upward motion",
+          "stagger_delay": "50-100ms between cards",
+          "scroll_trigger": "animate in when cards enter viewport"
+        }
+      },
+      "design_principles": {
+        "one_message_per_card": "each card communicates a single clear idea",
+        "visual_hierarchy": "vary card sizes to emphasize importance",
+        "generous_whitespace": "don't overcrowd cards with content",
+        "consistency": "maintain consistent styling across all cards",
+        "flexibility": "grid adapts to content needs while staying structured"
+      },
+      "use_cases": [
+        "product marketing homepages",
+        "feature showcases",
+        "portfolio websites",
+        "dashboard overview screens",
+        "content aggregation pages",
+        "app landing pages"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Minimalism 2.0 with Micro-Interactions",
+      "aesthetic": "clean, calm, product-led",
+      "category": "modern-minimalism",
+      "description": "An evolution of minimalist design that adds subtle personality through thoughtful micro-interactions and refined details. Prioritizes clarity, functionality, and calm user experiences while maintaining visual interest through purposeful animation and hierarchy.",
+      "colors": {
+        "background": {
+          "primary": "#fafafa",
+          "secondary": "#ffffff",
+          "alternatives": ["#f8f8f8", "#fcfcfc"]
+        },
+        "accent": {
+          "primary": "#0052cc",
+          "hover": "#003d99",
+          "light": "#e6f0ff",
+          "alternatives": ["#2563eb", "#7c3aed", "#059669", "#dc2626"]
+        },
+        "text": {
+          "primary": "#1a1a1a",
+          "secondary": "#666666",
+          "tertiary": "#999999",
+          "on_accent": "#ffffff"
+        },
+        "borders": {
+          "hairline": "#e5e5e5",
+          "medium": "#d4d4d4",
+          "style": "1px solid"
+        },
+        "palette_strategy": "monochrome base + single accent color"
+      },
+      "typography": {
+        "font_family": "single modern sans-serif (e.g., 'Inter', 'SF Pro', 'Helvetica Neue')",
+        "hierarchy": {
+          "headings": {
+            "size": "32-48px",
+            "weight": "700-800",
+            "color": "#1a1a1a",
+            "line_height": "1.2",
+            "letter_spacing": "-0.02em"
+          },
+          "subheadings": {
+            "size": "20-24px",
+            "weight": "600",
+            "color": "#1a1a1a",
+            "line_height": "1.3"
+          },
+          "labels": {
+            "size": "14-16px",
+            "weight": "500-600",
+            "color": "#333333",
+            "line_height": "1.4"
+          },
+          "body": {
+            "size": "14-16px",
+            "weight": "400",
+            "color": "#666666",
+            "line_height": "1.6"
+          },
+          "caption": {
+            "size": "12-14px",
+            "weight": "400",
+            "color": "#999999",
+            "line_height": "1.5"
+          }
+        },
+        "scale": "strong hierarchy with clear size distinctions"
+      },
+      "spacing_system": {
+        "base_unit": "8px",
+        "scale": [4, 8, 12, 16, 24, 32, 40, 48, 64, 80],
+        "usage": {
+          "4px": "tight spacing, icon padding",
+          "8px": "between related elements",
+          "16px": "between components",
+          "24px": "section padding",
+          "32px": "between sections",
+          "48px": "major section breaks"
+        },
+        "consistency": "all spacing must be multiples of 8px"
+      },
+      "components": {
+        "cards": {
+          "background": "#ffffff",
+          "border": "1px solid #e5e5e5",
+          "border_radius": "8-12px",
+          "padding": "24px",
+          "shadow": "none or very subtle 0 1px 3px rgba(0, 0, 0, 0.04)",
+          "style": "flat with hairline borders"
+        },
+        "buttons": {
+          "primary": {
+            "background": "accent color",
+            "color": "#ffffff",
+            "padding": "12px 24px",
+            "border_radius": "6-8px",
+            "border": "none",
+            "font_weight": "500"
+          },
+          "secondary": {
+            "background": "transparent",
+            "color": "accent color",
+            "border": "1px solid accent color",
+            "padding": "12px 24px"
+          },
+          "ghost": {
+            "background": "transparent",
+            "color": "#666666",
+            "border": "none",
+            "hover_background": "#f5f5f5"
+          }
+        },
+        "icons": {
+          "style": "simple monochrome line icons",
+          "stroke_width": "1.5-2px",
+          "size": "20-24px",
+          "color": "#666666",
+          "hover_color": "accent color"
+        },
+        "inputs": {
+          "background": "#ffffff",
+          "border": "1px solid #e5e5e5",
+          "border_radius": "6px",
+          "padding": "10px 14px",
+          "focus_border": "accent color",
+          "focus_shadow": "0 0 0 3px rgba(accent, 0.1)"
+        }
+      },
+      "layout": {
+        "structure": "2-column layout",
+        "left_navigation": {
+          "width": "240-280px",
+          "background": "#fafafa or #ffffff",
+          "border_right": "1px solid #e5e5e5",
+          "padding": "24px 16px",
+          "fixed": true
+        },
+        "main_content": {
+          "width": "calc(100% - 240px)",
+          "padding": "32-48px",
+          "max_width": "1200px"
+        },
+        "whitespace": {
+          "philosophy": "ample, generous",
+          "between_sections": "48-64px",
+          "around_content": "32-48px",
+          "in_components": "16-24px"
+        }
+      },
+      "micro_interactions": {
+        "hover_effects": {
+          "buttons": {
+            "scale": "1.02",
+            "shadow": "0 4px 12px rgba(0, 0, 0, 0.08)",
+            "duration": "150ms"
+          },
+          "cards": {
+            "shadow": "0 4px 12px rgba(0, 0, 0, 0.06)",
+            "border_color": "#d4d4d4",
+            "duration": "200ms"
+          },
+          "links": {
+            "color": "accent hover color",
+            "underline": "2px from bottom"
+          }
+        },
+        "click_effects": {
+          "scale": "0.98",
+          "duration": "100ms",
+          "spring_back": true
+        },
+        "transitions": {
+          "default": "all 200ms cubic-bezier(0.4, 0, 0.2, 1)",
+          "fast": "150ms ease-out",
+          "slow": "300ms ease-in-out"
+        },
+        "focus_states": {
+          "outline": "2px solid accent color",
+          "outline_offset": "2px",
+          "shadow": "0 0 0 3px rgba(accent, 0.1)"
+        }
+      },
+      "design_principles": {
+        "calm": "avoid visual noise and unnecessary elements",
+        "product_led": "focus attention on core functionality",
+        "hierarchy": "use size, weight, and spacing to guide attention",
+        "consistency": "maintain patterns across all components",
+        "purposeful_animation": "animations serve a functional purpose",
+        "accessibility": "high contrast, clear focus states, readable text"
+      },
+      "characteristics": {
+        "loading_states": "subtle skeleton screens or spinners",
+        "empty_states": "friendly illustrations with helpful copy",
+        "error_states": "calm, clear error messages with solutions",
+        "success_feedback": "subtle checkmarks and color changes"
+      },
+      "use_cases": [
+        "SaaS dashboards",
+        "productivity tools",
+        "data visualization platforms",
+        "B2B applications",
+        "admin interfaces",
+        "professional services websites"
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Maximalism / Memphis & Scrapbook Revival",
+      "aesthetic": "bold, playful, layered chaos",
+      "category": "maximalism-memphis",
+      "description": "A vibrant, expressive style that embraces 'more is more' philosophy. Combines Memphis design elements (geometric shapes, bold patterns) with scrapbook aesthetics (collaged photos, stickers, handwritten elements). Creates energetic, memorable experiences while maintaining strategic clarity.",
+      "colors": {
+        "background": {
+          "type": "full-bleed gradient or solid bright color",
+          "gradient_example": "linear-gradient(135deg, #ff6b9d 0%, #ffa94d 50%, #00d4ff 100%)",
+          "alternative_gradients": [
+            "#c471ed → #f7797d → #fbd786",
+            "#667eea → #764ba2 → #f093fb",
+            "#4facfe → #00f2fe → #43e97b"
+          ],
+          "solid_alternatives": ["#ff6b9d", "#ffa94d", "#00d4ff", "#a8ff78"]
+        },
+        "palette": {
+          "strategy": "bold, clashing colors that somehow work",
+          "primary_colors": ["#ff6b9d", "#ffa94d", "#00d4ff", "#c471ed", "#43e97b"],
+          "accent_colors": ["#ffeb3b", "#ff5722", "#9c27b0", "#00bcd4", "#8bc34a"],
+          "contrast": "high saturation, medium-high contrast for readability"
+        },
+        "cards_and_elements": {
+          "backgrounds": ["white", "cream (#fffef5)", "pastel tints", "bright solids"],
+          "photo_borders": "white 8-12px border with drop shadow",
+          "sticker_colors": "bright, saturated accent colors"
+        }
+      },
+      "typography": {
+        "headlines": {
+          "family": "extra-heavy display fonts (e.g., 'Archivo Black', 'Fredoka One', 'Bungee', 'Bowlby One')",
+          "weight": "800-900",
+          "size": "48-96px",
+          "color": "black, white, or bright accent",
+          "effects": ["rotation -5° to +5°", "outline stroke", "drop shadow", "color fills"],
+          "style": "bold, unapologetic, attention-grabbing"
+        },
+        "subheadings": {
+          "family": "bold sans-serif or handwritten style",
+          "weight": "700-800",
+          "size": "24-36px",
+          "rotation": "slight rotation for playfulness",
+          "mixed_sizes": "intentionally varied for energy"
+        },
+        "body": {
+          "family": "playful but readable sans-serif (e.g., 'DM Sans', 'Inter', 'Public Sans')",
+          "weight": "400-500",
+          "size": "16-18px",
+          "line_height": "1.6",
+          "color": "#1a1a1a or #2d2d2d",
+          "note": "kept clean to balance visual chaos"
+        },
+        "decorative_text": {
+          "handwritten_fonts": ["Permanent Marker", "Indie Flower", "Caveat"],
+          "usage": "accents, annotations, small labels"
+        }
+      },
+      "graphic_elements": {
+        "memphis_shapes": {
+          "types": ["squiggles", "dots", "zigzags", "triangles", "circles", "abstract blobs"],
+          "style": "hand-drawn or imperfect",
+          "colors": "bright accent colors",
+          "placement": "scattered throughout, behind or around content",
+          "size": "varied from small (20px) to large (200px)"
+        },
+        "patterns": {
+          "types": ["polka dots", "stripes", "wavy lines", "geometric grids"],
+          "opacity": "20-40% to avoid overwhelming",
+          "usage": "background fills or section dividers"
+        },
+        "stickers": {
+          "appearance": "bright colored shapes with playful icons or text",
+          "shadow": "2-4px offset drop shadow",
+          "rotation": "-15° to +15°",
+          "placement": "overlapping edges of content"
+        }
+      },
+      "components": {
+        "cards": {
+          "shape": "irregular, hand-drawn feel",
+          "border_radius": "varies 8-24px, can be asymmetric",
+          "background": "white or cream with subtle texture",
+          "shadow": "strong 4-8px offset shadow in bright color",
+          "rotation": "-3° to +3° for dynamism",
+          "overlap": "cards intentionally overlap slightly"
+        },
+        "photos": {
+          "style": "collage of cut-out images",
+          "border": "white 8-12px border",
+          "shadow": "4-6px offset drop shadow rgba(0,0,0,0.2)",
+          "rotation": "-8° to +8°",
+          "placement": "overlapping, scattered arrangement"
+        },
+        "buttons": {
+          "style": "sticker-like CTA buttons",
+          "shape": "rounded or organic blob shapes",
+          "colors": "bright solid colors with contrast text",
+          "shadow": "strong drop shadow 4-6px offset",
+          "padding": "16-24px 32-48px",
+          "hover_effect": "slight rotation + increased shadow"
+        },
+        "icons": {
+          "style": "hand-drawn or quirky illustration style",
+          "colors": "bright, mixed palette",
+          "size": "32-64px",
+          "outline": "thick 2-3px stroke"
+        }
+      },
+      "textures": {
+        "paper_grain": {
+          "opacity": "3-5%",
+          "color": "black or warm gray",
+          "coverage": "full background or on cards"
+        },
+        "halftone": {
+          "style": "comic book style dots",
+          "usage": "selective areas for emphasis"
+        },
+        "noise": {
+          "amount": "subtle 2-4%",
+          "purpose": "add analog warmth"
+        }
+      },
+      "layout": {
+        "type": "desktop-optimized asymmetric",
+        "structure": "intentionally chaotic but navigable",
+        "organization": {
+          "primary_cta": "always clear and prominent",
+          "visual_flow": "guided by size, color, and placement",
+          "hierarchy": "through scale and color contrast"
+        },
+        "grid": "broken or invisible grid that creates organized chaos",
+        "spacing": "varied and dynamic, not systematic"
+      },
+      "animations": {
+        "hover_effects": {
+          "cards": "slight tilt rotation",
+          "photos": "scale(1.05) with shadow increase",
+          "buttons": "wiggle animation or rotation",
+          "stickers": "bounce or pulse"
+        },
+        "page_load": {
+          "elements": "stagger in with spring animations",
+          "delay": "50-150ms between elements",
+          "easing": "cubic-bezier(0.68, -0.55, 0.265, 1.55)"
+        },
+        "scroll_effects": {
+          "parallax": "elements move at different speeds",
+          "reveal": "elements slide or fade in from sides"
+        }
+      },
+      "design_principles": {
+        "controlled_chaos": "looks wild but has clear information hierarchy",
+        "playful_professionalism": "fun without sacrificing usability",
+        "bold_decisions": "embrace strong colors and dramatic compositions",
+        "layer_intentionally": "overlapping creates depth and interest",
+        "clear_primary_action": "despite chaos, CTA must be obvious",
+        "readability_first": "body text remains clean and legible"
+      },
+      "balance_strategies": {
+        "whitespace_pockets": "create breathing room in busy layouts",
+        "color_blocking": "use large color fields to organize chaos",
+        "size_hierarchy": "make important elements significantly larger",
+        "alignment": "subtle alignment creates order in apparent disorder"
+      },
+      "use_cases": [
+        "creative studio homepages",
+        "artist portfolios",
+        "youth-oriented brands",
+        "event landing pages",
+        "fashion and streetwear sites",
+        "music and entertainment",
+        "quirky product launches",
+        "design agency showcases"
+      ]
+    }
+  ]
+}

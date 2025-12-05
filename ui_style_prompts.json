@@ -1,0 +1,52 @@
+{
+  "styles": [
+    {
+      "id": 1,
+      "name": "Neo‑Brutalism / Digital Brutalism",
+      "aesthetic": "raw, bold, anti-corporate",
+      "prompt": "Dashboard interface in **neo‑brutalist** style: full‑width hero, rigid grid, huge left‑aligned headline in plain sans‑serif, **thick black outlines** around cards, flat primary colors (electric blue, warning yellow, hot red) on off‑white background, minimal icons, obvious blue underlined text links, harsh spacing, no gradients or shadows, deliberate asymmetry, raw HTML‑like buttons, highly legible contrast, responsive desktop web layout."
+    },
+    {
+      "id": 2,
+      "name": "Refined Glassmorphism (Layered, Frosted Cards)",
+      "aesthetic": "premium, layered, translucent",
+      "prompt": "Modern SaaS analytics dashboard in **refined glassmorphism**: dark blurred gradient background (deep navy to teal), floating semi‑transparent cards with frosted glass effect and soft blur, thin light borders, subtle drop shadows, neon cyan and magenta accent lines, clean geometric sans‑serif typography, rounded 12–16px corner radius, simple line icons, high contrast labels, tasteful micro‑graphs on cards, overall sleek and premium feel, desktop web UI."
+    },
+    {
+      "id": 3,
+      "name": "Dark Mode + Neon (Futuristic Noir)",
+      "aesthetic": "futuristic, high-contrast, gaming-inspired",
+      "prompt": "Futuristic **dark‑mode** web app for crypto portfolio tracking: near‑black background with subtle noise texture, glowing **neon cyan and purple** accent lines, pill buttons with outer glow, thin grid lines barely visible, clean mono‑spaced headings and geometric body font, high‑contrast white text, minimal 3D, HUD‑style overlays for charts, soft animated gradients in header, compact desktop layout with left sidebar navigation."
+    },
+    {
+      "id": 4,
+      "name": "Claymorphism / Soft 3D UI",
+      "aesthetic": "playful, tactile, inflated 3D",
+      "prompt": "Mobile banking app home screen in **claymorphism**: full‑bleed soft pastel gradient background (peach to lavender), large puffy cards with squircle corners, strong offset drop shadow (10–20px) to suggest floating clay blocks, subtle inner shadows on top edge, playful 3D clay‑style icons, bold rounded display font for balance amounts, minimal text, friendly micro‑animations, overall approachable, tactile aesthetic, iOS mobile layout."
+    },
+    {
+      "id": 5,
+      "name": "Y2K / Retro‑Futurist Interfaces",
+      "aesthetic": "nostalgic, energetic, pixelated",
+      "prompt": "Landing page hero in **Y2K retro‑futurist** style: full‑screen iridescent gradient background (electric blue, lime green, chrome silver), chunky rounded 3D logo text with highlight and specular shine, asymmetric layout with floating windows and pixel‑style icons, subtle scanline and glitch overlay, neon outline buttons, small grain texture, mix of playful display font and simple sans‑serif body text, energetic but still readable desktop layout."
+    },
+    {
+      "id": 6,
+      "name": "Bento Grid Layouts (Modular Card Systems)",
+      "aesthetic": "structured, modular, dynamic",
+      "prompt": "Product marketing homepage using a **bento grid** layout: clean light background, 3×3 grid of cards with varied spans, each card dedicated to one message (hero feature, testimonial, KPI, product screenshot), subtle rounded corners, soft shadows or light borders, simple two‑tone palette with one strong accent color, bold but minimal headings, generous whitespace, tiny micro‑animations on hover (lift, scale, subtle glow), responsive desktop web design."
+    },
+    {
+      "id": 7,
+      "name": "Minimalism 2.0 with Micro‑Interactions",
+      "aesthetic": "clean, calm, product-led",
+      "prompt": "Clean **minimalist** SaaS dashboard: off‑white background, single accent color (cobalt blue), 2‑column layout with left navigation and right content, ample whitespace, simple monochrome icons, consistent 8px spacing system, one modern sans‑serif font with strong hierarchy (large bold headings, medium weight labels, light body), flat cards with hairline borders, subtle micro‑interactions on hover and click (scale 1.02, soft shadow), calm, product‑led aesthetic, desktop web UI."
+    },
+    {
+      "id": 8,
+      "name": "Maximalism / Memphis & Scrapbook Revival",
+      "aesthetic": "bold, playful, layered chaos",
+      "prompt": "Homepage for a creative studio in **maximalist Memphis / scrapbook** style: full‑bleed bright gradient background (pink–orange–turquoise), overlapping irregular cards, hand‑drawn squiggles and dots, collage of cut‑out photos with white borders and drop shadows, bold extra‑heavy display font for headlines, mixed font sizes and rotations, sticker‑like CTA buttons, subtle paper grain texture, playful but readable body text, controlled chaos with clear primary CTA, desktop layout."
+    }
+  ]
+}

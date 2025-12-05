@@ -1,0 +1,332 @@
+{
+  "styles": [
+    {
+      "id": 3,
+      "name": "Dark Mode + Neon (Futuristic Noir)",
+      "aesthetic": "futuristic, high-contrast, gaming-inspired",
+      "category": "dark-mode-neon",
+      "description": "A cyberpunk-inspired dark interface with glowing neon accents that evokes high-tech command centers and gaming UIs. Perfect for crypto, fintech, or tech-forward applications.",
+      "colors": {
+        "background": {
+          "primary": "#0a0a0f",
+          "secondary": "#12121a",
+          "texture": "subtle noise overlay at 2-3% opacity"
+        },
+        "text": {
+          "primary": "#ffffff",
+          "secondary": "#a0a0b8",
+          "contrast": "high (WCAG AAA compliant)"
+        },
+        "accents": {
+          "neon_cyan": "#00f0ff",
+          "neon_purple": "#bf00ff",
+          "glow_intensity": "8-12px blur radius"
+        },
+        "grid": {
+          "color": "#1a1a2e",
+          "opacity": 0.3
+        }
+      },
+      "typography": {
+        "headings": {
+          "family": "monospaced (e.g., 'JetBrains Mono', 'Roboto Mono', 'Courier Prime')",
+          "weight": "600-700",
+          "transform": "uppercase",
+          "letter_spacing": "0.05em",
+          "color": "#ffffff"
+        },
+        "body": {
+          "family": "geometric sans-serif (e.g., 'Inter', 'DM Sans', 'Space Grotesk')",
+          "weight": "400-500",
+          "size": "14-16px",
+          "line_height": "1.6",
+          "color": "#e0e0e8"
+        }
+      },
+      "components": {
+        "buttons": {
+          "shape": "pill (fully rounded)",
+          "background": "transparent or dark (#1a1a2e)",
+          "border": "1-2px solid neon accent",
+          "glow": "outer glow 8-12px in accent color",
+          "hover_state": "increased glow intensity + slight scale (1.02)",
+          "padding": "12px 24px"
+        },
+        "cards": {
+          "background": "#15151f",
+          "border": "1px solid #1f1f30",
+          "border_radius": "8-12px",
+          "shadow": "subtle 0 4px 20px rgba(0, 240, 255, 0.1)"
+        },
+        "charts": {
+          "style": "HUD-style overlays",
+          "grid": "thin cyan lines at low opacity",
+          "data_colors": ["#00f0ff", "#bf00ff", "#ff006e", "#00ff88"]
+        }
+      },
+      "layout": {
+        "type": "desktop-first",
+        "structure": "left sidebar navigation (60-80px fixed width)",
+        "spacing": "compact, 16-24px gaps",
+        "sidebar": {
+          "background": "#0a0a0f",
+          "icons": "neon accent on hover",
+          "width": "60-80px collapsed, 240px expanded"
+        }
+      },
+      "effects": {
+        "animations": {
+          "gradient_shift": "soft animated gradients in header (3-5s duration)",
+          "glow_pulse": "subtle pulsing on active elements",
+          "transitions": "all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1)"
+        },
+        "overlays": {
+          "scanlines": "optional subtle horizontal lines at 2px intervals",
+          "vignette": "radial gradient darkening at edges"
+        }
+      },
+      "use_cases": [
+        "crypto portfolio tracking",
+        "gaming dashboards",
+        "developer tools",
+        "fintech applications",
+        "analytics platforms"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Claymorphism / Soft 3D UI",
+      "aesthetic": "playful, tactile, inflated 3D",
+      "category": "claymorphism",
+      "description": "A warm, approachable design language featuring soft, puffy elements that appear to float like sculpted clay. Creates a friendly, tactile experience perfect for consumer-facing apps.",
+      "colors": {
+        "background": {
+          "type": "full-bleed gradient",
+          "start": "#ffd4c4",
+          "end": "#d4b3ff",
+          "angle": "135deg",
+          "alternative_palettes": [
+            {"start": "#ffe4e1", "end": "#e1f5ff"},
+            {"start": "#fff4d4", "end": "#ffd4e1"}
+          ]
+        },
+        "elements": {
+          "cards": "white or light pastels (#fef9f5, #f5f5ff)",
+          "opacity": "95-100%"
+        },
+        "text": {
+          "primary": "#2d2d3a",
+          "secondary": "#6b6b80",
+          "on_color": "#ffffff"
+        }
+      },
+      "typography": {
+        "headings": {
+          "family": "rounded display font (e.g., 'Quicksand', 'Fredoka', 'Comfortaa')",
+          "weight": "700-800",
+          "size": "32-48px for balance amounts",
+          "color": "#2d2d3a",
+          "letter_spacing": "-0.02em"
+        },
+        "body": {
+          "family": "rounded sans-serif (e.g., 'Inter', 'DM Sans')",
+          "weight": "400-500",
+          "size": "14-16px",
+          "line_height": "1.5",
+          "minimal": true
+        }
+      },
+      "components": {
+        "cards": {
+          "shape": "squircle (smooth continuous curve, not just rounded corners)",
+          "border_radius": "28-40px",
+          "padding": "24-32px",
+          "shadow": {
+            "type": "strong offset drop shadow",
+            "x_offset": "8-12px",
+            "y_offset": "12-20px",
+            "blur": "24-32px",
+            "color": "rgba(0, 0, 0, 0.12)",
+            "description": "suggests floating clay blocks"
+          },
+          "inner_shadow": {
+            "position": "top edge",
+            "size": "subtle 0 2px 4px inset",
+            "color": "rgba(0, 0, 0, 0.05)"
+          },
+          "appearance": "puffy, inflated, tactile"
+        },
+        "buttons": {
+          "shape": "fully rounded pill or squircle",
+          "padding": "14-18px 28-36px",
+          "shadow": "similar to cards but slightly less prominent",
+          "hover_state": "slight lift (translateY -2px) + increased shadow"
+        },
+        "icons": {
+          "style": "3D clay-style",
+          "appearance": "soft, rounded, slightly inflated",
+          "colors": "pastel accent colors",
+          "size": "32-48px"
+        }
+      },
+      "layout": {
+        "type": "mobile-first (iOS optimized)",
+        "orientation": "portrait",
+        "spacing": "generous 20-32px gaps between cards",
+        "alignment": "centered content",
+        "safe_areas": "respect iOS notch and home indicator"
+      },
+      "effects": {
+        "animations": {
+          "micro_interactions": "friendly bounce or scale effects",
+          "duration": "200-400ms",
+          "easing": "cubic-bezier(0.68, -0.55, 0.265, 1.55) for bounce",
+          "triggers": ["tap", "swipe", "pull-to-refresh"]
+        },
+        "hover_states": {
+          "elevation": "increase shadow offset by 2-4px",
+          "transform": "translateY(-2px) scale(1.01)"
+        }
+      },
+      "characteristics": {
+        "approachable": true,
+        "playful": true,
+        "modern": true,
+        "tactile_feedback": "visual suggestion of physical interaction"
+      },
+      "use_cases": [
+        "mobile banking apps",
+        "fitness tracking",
+        "educational apps",
+        "lifestyle and wellness",
+        "consumer fintech"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Y2K / Retro-Futurist Interfaces",
+      "aesthetic": "nostalgic, energetic, pixelated",
+      "category": "y2k-retro",
+      "description": "An energetic throwback to early 2000s digital optimism, combining chrome effects, iridescent gradients, and playful pixelated elements. Balances nostalgia with modern usability.",
+      "colors": {
+        "background": {
+          "type": "full-screen iridescent gradient",
+          "colors": ["#00d4ff", "#9aff00", "#c0c0d8"],
+          "effect": "chrome silver shimmer overlay",
+          "animation": "subtle shifting (5-8s duration)"
+        },
+        "accents": {
+          "electric_blue": "#00d4ff",
+          "lime_green": "#9aff00",
+          "hot_pink": "#ff006e",
+          "chrome_silver": "#e8e8f0",
+          "cyber_purple": "#bf00ff"
+        },
+        "text": {
+          "primary": "#000000 or #1a1a1a",
+          "secondary": "#4a4a5a",
+          "highlight": "electric blue or lime green",
+          "readability": "maintained despite energetic palette"
+        }
+      },
+      "typography": {
+        "logo": {
+          "type": "chunky rounded 3D text",
+          "effects": ["highlight", "specular shine", "chrome gradient"],
+          "weight": "800-900",
+          "size": "64-96px",
+          "extrusion": "8-12px depth"
+        },
+        "headings": {
+          "family": "playful display font (e.g., 'Righteous', 'Archivo Black', 'Bungee')",
+          "weight": "700-800",
+          "size": "32-56px",
+          "color": "#000000",
+          "effects": "optional outline or shadow"
+        },
+        "body": {
+          "family": "simple sans-serif (e.g., 'Inter', 'Arial', 'Helvetica')",
+          "weight": "400-500",
+          "size": "14-16px",
+          "line_height": "1.6",
+          "color": "#2a2a2a",
+          "note": "kept clean for readability balance"
+        }
+      },
+      "components": {
+        "windows": {
+          "style": "floating browser-style windows",
+          "appearance": "asymmetric placement",
+          "chrome": "glossy header bar with control buttons",
+          "shadow": "strong 0 8px 32px rgba(0, 0, 0, 0.15)",
+          "border": "1-2px solid accent color"
+        },
+        "buttons": {
+          "style": "neon outline",
+          "border": "2-3px solid accent color",
+          "background": "transparent or white",
+          "padding": "12-20px 24-40px",
+          "border_radius": "4-8px",
+          "hover_state": "filled with accent color + glow"
+        },
+        "icons": {
+          "style": "pixel-style or low-poly 3D",
+          "size": "24-32px",
+          "colors": "bright accent colors",
+          "aesthetic": "deliberately chunky/nostalgic"
+        }
+      },
+      "layout": {
+        "type": "desktop-optimized",
+        "structure": "asymmetric",
+        "composition": "dynamic, non-grid elements encouraged",
+        "hierarchy": "strong visual focal points",
+        "breakpoints": "1440px+ ideal viewing"
+      },
+      "effects": {
+        "overlays": {
+          "scanlines": {
+            "opacity": 0.05,
+            "height": "2px lines",
+            "spacing": "4px"
+          },
+          "glitch": {
+            "type": "subtle RGB split",
+            "intensity": "2-4px offset on interaction",
+            "frequency": "occasional (not constant)"
+          },
+          "grain": {
+            "texture": "small grain overlay",
+            "opacity": 0.03,
+            "size": "fine (2-3px)"
+          }
+        },
+        "animations": {
+          "gradient_shift": "iridescent background slowly cycles",
+          "hover_effects": "slight rotation or skew on windows",
+          "button_press": "quick scale + color fill",
+          "duration": "200-600ms",
+          "easing": "cubic-bezier(0.34, 1.56, 0.64, 1) for bounce"
+        },
+        "chrome_effect": {
+          "technique": "linear gradient with multiple color stops",
+          "reflection": "white highlight on top edge",
+          "depth": "subtle shadow underneath"
+        }
+      },
+      "characteristics": {
+        "nostalgic": "references 1998-2004 web design",
+        "energetic": "high visual energy without overwhelming",
+        "readable": "maintains usability despite busy aesthetic",
+        "optimistic": "reflects early internet enthusiasm"
+      },
+      "use_cases": [
+        "creative agency landing pages",
+        "music and entertainment sites",
+        "fashion and streetwear brands",
+        "gaming communities",
+        "retro-themed product launches"
+      ]
+    }
+  ]
+}
