@@ -12,6 +12,7 @@ export interface Module {
     duration: string; // e.g. "15 min"
     content: string; // Markdown-like or text
     type: 'video' | 'reading' | 'lab';
+    videoUrl?: string;
     quiz?: QuizQuestion[];
 }
 

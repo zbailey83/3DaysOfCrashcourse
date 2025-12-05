@@ -1,53 +1,105 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Play, Pause, Volume2, VolumeX, Maximize, Settings, SkipBack, SkipForward } from 'lucide-react';
 
 interface VideoPlayerProps {
     title: string;
     duration: string;
     thumbnail?: string;
+    videoUrl?: string;
 }
 
-export const VideoPlayer: React.FC<VideoPlayerProps> = ({ title, duration, thumbnail }) => {
+export const VideoPlayer: React.FC<VideoPlayerProps> = ({ title, duration, thumbnail, videoUrl }) => {
     const [isPlaying, setIsPlaying] = useState(false);
     const [isMuted, setIsMuted] = useState(false);
     const [progress, setProgress] = useState(0);
+    const videoRef = useRef<HTMLVideoElement>(null);
 
-    // Simulate progress when playing
-    React.useEffect(() => {
-        let interval: NodeJS.Timeout;
-        if (isPlaying) {
-            interval = setInterval(() => {
-                setProgress(p => (p >= 100 ? 0 : p + 0.5));
-            }, 100);
+    useEffect(() => {
+        if (videoRef.current) {
+            if (isPlaying) {
+                videoRef.current.play();
+            } else {
+                videoRef.current.pause();
+            }
         }
-        return () => clearInterval(interval);
     }, [isPlaying]);
+
+    useEffect(() => {
+        if (videoRef.current) {
+            videoRef.current.muted = isMuted;
+        }
+    }, [isMuted]);
+
+    const handleTimeUpdate = () => {
+        if (videoRef.current) {
+            const current = videoRef.current.currentTime;
+            const total = videoRef.current.duration;
+            setProgress((current / total) * 100);
+        }
+    };
+
+    const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (videoRef.current) {
+            const progressBar = e.currentTarget;
+            const rect = progressBar.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const percentage = (x / rect.width);
+            videoRef.current.currentTime = percentage * videoRef.current.duration;
+        }
+    };
+
+    // Fallback mock progress if no videoUrl
+    useEffect(() => {
+        if (!videoUrl) {
+            let interval: NodeJS.Timeout;
+            if (isPlaying) {
+                interval = setInterval(() => {
+                    setProgress(p => (p >= 100 ? 0 : p + 0.5));
+                }, 100);
+            }
+            return () => clearInterval(interval);
+        }
+    }, [isPlaying, videoUrl]);
 
     return (
         <div className="w-full bg-black rounded-2xl overflow-hidden shadow-2xl group relative aspect-video">
-            {/* Video Placeholder / Thumbnail */}
-            <div className="absolute inset-0 bg-slate-900 flex items-center justify-center">
-                {thumbnail ? (
-                    <img src={thumbnail} alt={title} className="w-full h-full object-cover opacity-60" />
-                ) : (
-                    <div className="absolute inset-0 bg-gradient-to-br from-slate-800 to-slate-900" />
-                )}
+            {videoUrl ? (
+                <video
+                    ref={videoRef}
+                    src={videoUrl}
+                    className="w-full h-full object-cover"
+                    onTimeUpdate={handleTimeUpdate}
+                    onEnded={() => setIsPlaying(false)}
+                    poster={thumbnail}
+                />
+            ) : (
+                /* Video Placeholder / Thumbnail for Mock */
+                <div className="absolute inset-0 bg-slate-900 flex items-center justify-center">
+                    {thumbnail ? (
+                        <img src={thumbnail} alt={title} className="w-full h-full object-cover opacity-60" />
+                    ) : (
+                        <div className="absolute inset-0 bg-gradient-to-br from-slate-800 to-slate-900" />
+                    )}
+                </div>
+            )}
 
-                {/* Play Button Overlay */}
-                {!isPlaying && (
-                    <button
-                        onClick={() => setIsPlaying(true)}
-                        className="absolute z-10 w-20 h-20 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:scale-110 hover:bg-white/20 transition-all border border-white/20 shadow-2xl group-hover:shadow-blue-500/20"
-                    >
-                        <Play size={32} className="ml-1 fill-white" />
-                    </button>
-                )}
-            </div>
+            {/* Play Button Overlay */}
+            {!isPlaying && (
+                <button
+                    onClick={() => setIsPlaying(true)}
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-20 h-20 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:scale-110 hover:bg-white/20 transition-all border border-white/20 shadow-2xl group-hover:shadow-blue-500/20"
+                >
+                    <Play size={32} className="ml-1 fill-white" />
+                </button>
+            )}
 
             {/* Controls Overlay */}
             <div className={`absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-6 transition-opacity duration-300 ${isPlaying ? 'opacity-0 group-hover:opacity-100' : 'opacity-100'}`}>
                 {/* Progress Bar */}
-                <div className="w-full h-1.5 bg-white/20 rounded-full mb-4 cursor-pointer hover:h-2.5 transition-all relative group/progress">
+                <div
+                    className="w-full h-1.5 bg-white/20 rounded-full mb-4 cursor-pointer hover:h-2.5 transition-all relative group/progress"
+                    onClick={handleSeek}
+                >
                     <div
                         className="h-full bg-[#2563EB] rounded-full relative"
                         style={{ width: `${progress}%` }}
@@ -79,7 +131,11 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ title, duration, thumb
                         </div>
 
                         <span className="text-xs font-medium text-white/70">
-                            {Math.floor((progress / 100) * parseInt(duration))}m / {duration}
+                            {videoUrl && videoRef.current ? (
+                                `${Math.floor(videoRef.current.currentTime / 60)}:${Math.floor(videoRef.current.currentTime % 60).toString().padStart(2, '0')} / ${duration}`
+                            ) : (
+                                `${Math.floor((progress / 100) * parseInt(duration))}m / ${duration}`
+                            )}
                         </span>
                     </div>
 

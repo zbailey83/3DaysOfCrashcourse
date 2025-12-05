@@ -237,13 +237,13 @@ export const CourseView: React.FC<CourseViewProps> = ({ course, moduleId, onBack
                     title={activeModule.title}
                     duration={activeModule.duration}
                     thumbnail={course.thumbnail}
+                    videoUrl={activeModule.videoUrl}
                   />
                 </div>
               )}
               <div className="prose prose-slate prose-lg max-w-none mb-12 prose-headings:font-display prose-headings:font-bold prose-a:text-[#2563EB] prose-img:rounded-2xl">
                 <ReactMarkdown>{activeModule.content}</ReactMarkdown>
               </div>
-
               {/* Quiz Section */}
               {activeModule.quiz && activeModule.quiz.length > 0 && (
                 <div className="mt-12 bg-[#F8FAFC] rounded-[24px] p-8 border border-slate-100">
@@ -295,6 +295,6 @@ export const CourseView: React.FC<CourseViewProps> = ({ course, moduleId, onBack
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
