@@ -93,7 +93,6 @@ export const Profile: React.FC<ProfileProps> = ({ courses, onNavigate }) => {
                 id: user.id,
                 full_name: fullName,
                 avatar_url: avatarUrl,
-                updated_at: new Date(),
             };
 
             const { error } = await supabase.from('profiles').upsert(updates);
@@ -116,35 +115,46 @@ export const Profile: React.FC<ProfileProps> = ({ courses, onNavigate }) => {
                 throw new Error('You must select an image to upload.');
             }
 
+            // Get user first to ensure we have the ID for the filename
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) throw new Error('User not authenticated');
+
             const file = event.target.files[0];
             const fileExt = file.name.split('.').pop();
-            const fileName = `${Math.random()}.${fileExt}`;
-            const filePath = `${fileName}`;
+            // Use user.id and timestamp for unique filename
+            const fileName = `${user.id}-${Date.now()}.${fileExt}`;
+            const filePath = fileName;
 
             const { error: uploadError } = await supabase.storage
                 .from('avatars')
-                .upload(filePath, file);
+                .upload(filePath, file, { upsert: true });
 
             if (uploadError) {
                 throw uploadError;
             }
 
             const { data } = supabase.storage.from('avatars').getPublicUrl(filePath);
+
+            if (!data.publicUrl) {
+                throw new Error('Failed to get public URL');
+            }
+
             setAvatarUrl(data.publicUrl);
 
             // Auto-save after upload
-            const { data: { user } } = await supabase.auth.getUser();
-            if (user) {
-                await supabase.from('profiles').upsert({
-                    id: user.id,
-                    avatar_url: data.publicUrl,
-                    updated_at: new Date(),
-                });
-            }
+            const { error: updateError } = await supabase.from('profiles').upsert({
+                id: user.id,
+                avatar_url: data.publicUrl,
+            });
 
-        } catch (error) {
-            alert('Error uploading avatar!');
-            console.error(error);
+            if (updateError) throw updateError;
+
+            // Refresh profile to ensure sync
+            await getProfile();
+
+        } catch (error: any) {
+            alert(`Error uploading avatar: ${error.message}`);
+            console.error('Upload error:', error);
         } finally {
             setUploading(false);
         }
