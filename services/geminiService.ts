@@ -12,24 +12,46 @@ const getClient = () => {
 export const generateCampaignContent = async (
   brandName: string,
   productDesc: string,
-  targetAudience: string
+  targetAudience: string,
+  mode: 'ad' | 'calendar' = 'ad'
 ) => {
   const client = getClient();
-  
-  const prompt = `
-    Act as a senior digital marketing strategist.
-    Brand: ${brandName}
-    Product: ${productDesc}
-    Target Audience: ${targetAudience}
 
-    Generate a mini-marketing campaign in STRICT JSON format with the following fields:
-    - "script": A 30-second video script with visual cues and narration.
-    - "social_posts": An array of 3 objects with "platform" (e.g., LinkedIn, Instagram, Twitter) and "content" (the post text).
-    - "seo_keywords": An array of 10 high-value semantic keywords.
-    - "image_prompt_suggestion": A descriptive prompt to generate an image for this campaign.
+  let prompt = '';
 
-    Do not use markdown formatting for the JSON. Just return the raw JSON string.
-  `;
+  if (mode === 'ad') {
+    prompt = `
+      Act as a senior digital marketing strategist.
+      Brand: ${brandName}
+      Product: ${productDesc}
+      Target Audience: ${targetAudience}
+
+      Generate a mini-marketing campaign in STRICT JSON format with the following fields:
+      - "script": A 30-second video script with visual cues and narration.
+      - "social_posts": An array of 3 objects with "platform" (e.g., LinkedIn, Instagram, Twitter) and "content" (the post text).
+      - "seo_keywords": An array of 10 high-value semantic keywords.
+      - "image_prompt_suggestion": A descriptive prompt to generate an image for this campaign.
+
+      Do not use markdown formatting for the JSON. Just return the raw JSON string.
+    `;
+  } else {
+    prompt = `
+      Act as a senior digital marketing strategist.
+      Brand: ${brandName}
+      Product: ${productDesc}
+      Target Audience: ${targetAudience}
+
+      Generate a 7-day content calendar in STRICT JSON format with the following fields:
+      - "calendar": An array of 7 objects, each representing a day. Each object must have:
+          - "day": "Day 1", "Day 2", etc.
+          - "theme": The content theme for the day.
+          - "post_idea": A brief description of the post.
+          - "platform": Recommended platform.
+      - "strategy_note": A brief strategic note about this calendar.
+
+      Do not use markdown formatting for the JSON. Just return the raw JSON string.
+    `;
+  }
 
   const response = await client.models.generateContent({
     model: GEMINI_TEXT_MODEL,
@@ -44,7 +66,7 @@ export const generateCampaignContent = async (
 
 export const generateImage = async (prompt: string) => {
   const client = getClient();
-  
+
   const response = await client.models.generateContent({
     model: GEMINI_IMAGE_MODEL,
     contents: {
@@ -61,13 +83,13 @@ export const generateImage = async (prompt: string) => {
       }
     }
   }
-  
+
   throw new Error("No image generated");
 };
 
 export const analyzeSeoText = async (text: string) => {
   const client = getClient();
-  
+
   const prompt = `
     Analyze the following marketing copy for SEO:
     "${text}"
@@ -83,7 +105,7 @@ export const analyzeSeoText = async (text: string) => {
     model: GEMINI_TEXT_MODEL,
     contents: prompt,
     config: {
-        responseMimeType: 'application/json'
+      responseMimeType: 'application/json'
     }
   });
 
