@@ -1,16 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
-import { UserProfile, UserProgress, UserArtifact } from '../types';
-import { Camera, User, Mail, Calendar, LogOut, Save, Loader2 } from 'lucide-react';
+import { UserProfile, Course } from '../types';
+import { ViewState } from '../App';
+import { Camera, User, LogOut, Save, Loader2, PlayCircle, Clock, ArrowRight, Zap } from 'lucide-react';
 import { StreakCounter } from './StreakCounter';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import { useProgress } from '../hooks/useProgress';
+import { useArtifacts } from '../hooks/useArtifacts';
+import { Badges } from './Badges';
 
-export const Profile: React.FC = () => {
+interface ProfileProps {
+    courses: Course[];
+    onNavigate: (view: ViewState) => void;
+}
+
+const data = [
+    { name: 'Writing', score: 85 },
+    { name: 'SEO', score: 65 },
+    { name: 'Visuals', score: 92 },
+    { name: 'Strategy', score: 70 },
+];
+
+export const Profile: React.FC<ProfileProps> = ({ courses, onNavigate }) => {
     const [loading, setLoading] = useState(true);
     const [uploading, setUploading] = useState(false);
     const [profile, setProfile] = useState<UserProfile | null>(null);
     const [fullName, setFullName] = useState('');
     const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
     const [stats, setStats] = useState({ completedModules: 0, totalArtifacts: 0 });
+    const [userId, setUserId] = useState<string | undefined>(undefined);
 
     useEffect(() => {
         getProfile();
@@ -22,6 +40,7 @@ export const Profile: React.FC = () => {
             const { data: { user } } = await supabase.auth.getUser();
 
             if (!user) throw new Error('No user');
+            setUserId(user.id);
 
             const { data, error } = await supabase
                 .from('profiles')
@@ -136,6 +155,14 @@ export const Profile: React.FC = () => {
         window.location.reload();
     };
 
+    const { getCourseProgress, progress } = useProgress(userId);
+    const { artifacts } = useArtifacts(userId);
+
+    // Calculate overall progress
+    const totalModules = courses.reduce((acc, course) => acc + course.modules.length, 0);
+    const overallProgress = totalModules > 0 ? Math.round((stats.completedModules / totalModules) * 100) : 0;
+
+
     if (loading && !profile) {
         return (
             <div className="flex items-center justify-center h-full">
@@ -145,90 +172,170 @@ export const Profile: React.FC = () => {
     }
 
     return (
-        <div className="max-w-2xl mx-auto animate-slide-up pb-10">
-            <h1 className="text-3xl font-display font-bold text-text-primary mb-8">Profile Settings</h1>
+        <div className="max-w-4xl mx-auto animate-slide-up pb-10 space-y-8">
+            <div className="flex justify-between items-center">
+                <h1 className="text-3xl font-display font-bold text-text-primary">Profile & Progress</h1>
+                <button
+                    onClick={handleSignOut}
+                    className="px-4 py-2 rounded-xl font-bold text-danger bg-danger/10 hover:bg-danger/20 transition-colors flex items-center border border-danger/20 text-sm"
+                >
+                    <LogOut size={16} className="mr-2" />
+                    Sign Out
+                </button>
+            </div>
 
-            <div className="glass-card rounded-[24px] p-8 mb-8">
-                <div className="flex flex-col items-center mb-8">
-                    <div className="relative group">
-                        <div className="w-32 h-32 rounded-full overflow-hidden bg-white/5 border-4 border-white/10 shadow-lg mb-4">
-                            {avatarUrl ? (
-                                <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
-                            ) : (
-                                <div className="w-full h-full flex items-center justify-center text-muted">
-                                    <User size={48} />
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {/* Left Column: Profile Settings */}
+                <div className="lg:col-span-1 space-y-6">
+                    <div className="glass-card rounded-[24px] p-6">
+                        <div className="flex flex-col items-center mb-6">
+                            <div className="relative group">
+                                <div className="w-24 h-24 rounded-full overflow-hidden bg-white/5 border-4 border-white/10 shadow-lg mb-3">
+                                    {avatarUrl ? (
+                                        <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+                                    ) : (
+                                        <div className="w-full h-full flex items-center justify-center text-muted">
+                                            <User size={32} />
+                                        </div>
+                                    )}
                                 </div>
-                            )}
+                                <label className="absolute bottom-2 right-0 bg-primary text-white p-1.5 rounded-full cursor-pointer hover:bg-blue-600 transition-colors shadow-md" htmlFor="avatar-upload">
+                                    {uploading ? <Loader2 size={14} className="animate-spin" /> : <Camera size={14} />}
+                                </label>
+                                <input
+                                    type="file"
+                                    id="avatar-upload"
+                                    accept="image/*"
+                                    onChange={uploadAvatar}
+                                    disabled={uploading}
+                                    className="hidden"
+                                />
+                            </div>
+                            <h2 className="text-lg font-bold text-text-primary">{fullName || 'User'}</h2>
+                            <p className="text-muted text-xs">{profile?.email}</p>
                         </div>
-                        <label className="absolute bottom-4 right-0 bg-primary text-white p-2 rounded-full cursor-pointer hover:bg-blue-600 transition-colors shadow-md" htmlFor="avatar-upload">
-                            {uploading ? <Loader2 size={16} className="animate-spin" /> : <Camera size={16} />}
-                        </label>
-                        <input
-                            type="file"
-                            id="avatar-upload"
-                            accept="image/*"
-                            onChange={uploadAvatar}
-                            disabled={uploading}
-                            className="hidden"
-                        />
-                    </div>
-                    <h2 className="text-xl font-bold text-text-primary">{fullName || 'User'}</h2>
-                    <p className="text-muted text-sm">{profile?.email}</p>
-                </div>
 
-                <div className="space-y-6">
-                    <div>
-                        <label className="block text-sm font-bold text-text-primary mb-2">Full Name</label>
-                        <input
-                            type="text"
-                            value={fullName}
-                            onChange={(e) => setFullName(e.target.value)}
-                            className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                            placeholder="Enter your full name"
-                        />
-                    </div>
+                        <div className="space-y-4">
+                            <div>
+                                <label className="block text-xs font-bold text-text-primary mb-1.5">Full Name</label>
+                                <input
+                                    type="text"
+                                    value={fullName}
+                                    onChange={(e) => setFullName(e.target.value)}
+                                    className="w-full px-3 py-2.5 rounded-xl bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-slate-900 dark:text-white focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all text-sm"
+                                    placeholder="Enter your full name"
+                                />
+                            </div>
 
-                    <div>
-                        <label className="block text-sm font-bold text-text-primary mb-2">Email Address</label>
-                        <div className="flex items-center px-4 py-3 rounded-xl border border-white/10 bg-white/5 text-muted">
-                            <Mail size={18} className="mr-3" />
-                            <span>{profile?.email}</span>
+                            <button
+                                onClick={updateProfile}
+                                disabled={loading}
+                                className="w-full py-2.5 rounded-xl font-bold text-white bg-gradient-to-r from-primary to-secondary hover:shadow-glow transition-all flex items-center justify-center shadow-lg text-sm"
+                            >
+                                {loading ? <Loader2 size={16} className="animate-spin mr-2" /> : <Save size={16} className="mr-2" />}
+                                Save Changes
+                            </button>
                         </div>
                     </div>
 
-                    <button
-                        onClick={updateProfile}
-                        disabled={loading}
-                        className="w-full py-3 rounded-xl font-bold text-white bg-gradient-to-r from-primary to-secondary hover:shadow-glow transition-all flex items-center justify-center shadow-lg"
-                    >
-                        {loading ? <Loader2 size={18} className="animate-spin mr-2" /> : <Save size={18} className="mr-2" />}
-                        Save Changes
-                    </button>
+                    <div className="grid grid-cols-2 gap-3">
+                        <div className="glass-card p-4 rounded-[20px] text-center">
+                            <div className="text-muted text-[10px] font-bold uppercase tracking-wider mb-1">Modules</div>
+                            <div className="text-2xl font-display font-bold text-text-primary">{stats.completedModules}</div>
+                        </div>
+                        <div className="glass-card p-4 rounded-[20px] text-center">
+                            <div className="text-muted text-[10px] font-bold uppercase tracking-wider mb-1">Artifacts</div>
+                            <div className="text-2xl font-display font-bold text-text-primary">{stats.totalArtifacts}</div>
+                        </div>
+                    </div>
+
+                    <StreakCounter className="glass-card border-white/10 shadow-sm" />
+                </div>
+
+                {/* Right Column: Progress & Courses */}
+                <div className="lg:col-span-2 space-y-8">
+                    {/* Overall Progress Card */}
+                    <div className="bg-gradient-to-br from-primary to-secondary p-8 rounded-[24px] shadow-glow text-white relative overflow-hidden group hover:scale-[1.02] transition-all duration-300">
+                        <div className="absolute top-0 right-0 w-48 h-48 bg-white/10 rounded-full -mr-16 -mt-16 blur-2xl group-hover:scale-110 transition-transform duration-700"></div>
+                        <div className="absolute bottom-0 left-0 w-32 h-32 bg-black/10 rounded-full -ml-10 -mb-10 blur-xl"></div>
+
+                        <h3 className="text-blue-100 font-medium mb-2 flex items-center relative z-10"><Zap className="w-4 h-4 mr-2 text-yellow-300" /> Overall Progress</h3>
+                        <div className="text-5xl font-display font-bold mb-6 relative z-10">{overallProgress}%</div>
+
+                        <div className="w-full bg-black/20 rounded-full h-3 mb-3 backdrop-blur-sm relative z-10">
+                            <div className="bg-white h-3 rounded-full shadow-[0_0_10px_rgba(255,255,255,0.5)] transition-all duration-1000" style={{ width: `${overallProgress}%` }}></div>
+                        </div>
+                        <p className="text-sm text-blue-50 font-medium relative z-10">Level {Math.floor(overallProgress / 20) + 1}: {overallProgress > 80 ? 'Master' : overallProgress > 50 ? 'Advanced' : 'Beginner'}</p>
+                    </div>
+
+                    {/* Skill Matrix */}
+                    <div className="glass-card p-8 rounded-[24px] hover:shadow-glow transition-all duration-300">
+                        <div className="flex items-center justify-between mb-8">
+                            <h3 className="text-xl font-display font-bold text-text-primary">Skill Matrix</h3>
+                        </div>
+                        <div className="h-64 w-full">
+                            <ResponsiveContainer width="100%" height="100%">
+                                <BarChart data={data}>
+                                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border-light)" />
+                                    <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: 'var(--text-secondary)', fontSize: 12, fontWeight: 500 }} dy={10} />
+                                    <YAxis axisLine={false} tickLine={false} tick={{ fill: 'var(--text-secondary)', fontSize: 12 }} />
+                                    <Tooltip
+                                        cursor={{ fill: 'var(--surface-glass-soft)' }}
+                                        contentStyle={{
+                                            borderRadius: '16px',
+                                            border: '1px solid var(--border-light)',
+                                            background: 'var(--surface-glass)',
+                                            boxShadow: 'var(--glass-shadow)',
+                                            padding: '12px',
+                                            fontFamily: 'Inter',
+                                            color: 'var(--text-primary)'
+                                        }}
+                                        itemStyle={{ color: 'var(--text-primary)' }}
+                                        labelStyle={{ color: 'var(--text-secondary)', marginBottom: '0.5rem' }}
+                                    />
+                                    <Bar dataKey="score" radius={[6, 6, 6, 6]} barSize={40} animationDuration={1500}>
+                                        {data.map((entry, index) => (
+                                            <Cell key={`cell-${index}`} fill="url(#colorGradient)" />
+                                        ))}
+                                    </Bar>
+                                    <defs>
+                                        <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="0%" stopColor="var(--color-primary)" stopOpacity={1} />
+                                            <stop offset="100%" stopColor="var(--color-secondary)" stopOpacity={0.8} />
+                                        </linearGradient>
+                                    </defs>
+                                </BarChart>
+                            </ResponsiveContainer>
+                        </div>
+                    </div>
+
+                    {/* Continue Learning */}
+                    <div className="glass-card p-6 rounded-[24px] hover:shadow-glow transition-all duration-300">
+                        <h3 className="font-display font-bold text-text-primary mb-4 text-lg">Continue Learning</h3>
+                        <div className="flex items-start space-x-4">
+                            <div className="bg-[#F59E0B]/10 p-3.5 rounded-2xl">
+                                <Clock className="text-[#F59E0B]" size={22} />
+                            </div>
+                            <div>
+                                <h4 className="font-semibold text-text-primary mb-1">Visual Asset Creation</h4>
+                                <p className="text-xs text-muted mb-3">Module 2 • 15m remaining</p>
+                                <button
+                                    onClick={() => onNavigate({ type: 'course', courseId: 'day-1-foundation', moduleId: 'm3.1-image-prompt' })}
+                                    className="text-primary text-sm font-bold hover:text-secondary transition-colors flex items-center group"
+                                >
+                                    Resume <ArrowRight size={14} className="ml-1 transform group-hover:translate-x-1 transition-transform" />
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Badges / Achievements */}
+                    <div>
+                        <h2 className="text-xl font-display font-bold text-text-primary mb-4">Achievements</h2>
+                        <Badges progress={progress} artifacts={artifacts} />
+                    </div>
                 </div>
             </div>
-
-            <div className="grid grid-cols-2 gap-4 mb-8">
-                <div className="glass-card p-6 rounded-[24px]">
-                    <div className="text-muted text-xs font-bold uppercase tracking-wider mb-2">Modules Completed</div>
-                    <div className="text-3xl font-display font-bold text-text-primary">{stats.completedModules}</div>
-                </div>
-                <div className="glass-card p-6 rounded-[24px]">
-                    <div className="text-muted text-xs font-bold uppercase tracking-wider mb-2">Artifacts Created</div>
-                    <div className="text-3xl font-display font-bold text-text-primary">{stats.totalArtifacts}</div>
-                </div>
-            </div>
-
-            <div className="mb-8">
-                <StreakCounter className="glass-card border-white/10 shadow-sm" />
-            </div>
-
-            <button
-                onClick={handleSignOut}
-                className="w-full py-4 rounded-xl font-bold text-danger bg-danger/10 hover:bg-danger/20 transition-colors flex items-center justify-center border border-danger/20"
-            >
-                <LogOut size={18} className="mr-2" />
-                Sign Out
-            </button>
         </div>
     );
 };

@@ -50,25 +50,25 @@ export const SeoAnalyzer: React.FC = () => {
 
       <div className="space-y-8">
         <div className="glass-card rounded-[24px] overflow-hidden transition-all focus-within:ring-4 focus-within:ring-primary/20 focus-within:border-primary/50">
-          <div className="p-6 border-b border-white/10 bg-white/5">
+          <div className="p-6 border-b border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5">
             <label className="block text-xs font-bold text-muted uppercase tracking-wider mb-2 flex items-center">
               <Target size={12} className="mr-1.5" /> Target Keyword (Optional)
             </label>
             <input
               type="text"
-              className="w-full p-3 bg-white/5 border border-white/10 rounded-xl text-sm font-medium text-white focus:outline-none focus:border-primary placeholder:text-slate-500"
+              className="w-full p-3 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl text-sm font-medium text-slate-900 dark:text-white focus:outline-none focus:border-primary placeholder:text-slate-500"
               placeholder="e.g., 'AI marketing tools'"
               value={targetKeyword}
               onChange={(e) => setTargetKeyword(e.target.value)}
             />
           </div>
           <textarea
-            className="w-full p-8 h-48 outline-none resize-none bg-transparent text-white text-lg placeholder:text-slate-500 font-light leading-relaxed"
+            className="w-full p-8 h-48 outline-none resize-none bg-transparent text-slate-900 dark:text-white text-lg placeholder:text-slate-500 font-light leading-relaxed"
             placeholder="Paste your content here to begin analysis..."
             value={text}
             onChange={(e) => setText(e.target.value)}
           />
-          <div className="bg-white/5 px-8 py-4 flex justify-between items-center border-t border-white/10">
+          <div className="bg-black/5 dark:bg-white/5 px-8 py-4 flex justify-between items-center border-t border-black/10 dark:border-white/10">
             <span className="text-xs text-muted font-bold uppercase tracking-wider">{text.split(/\s+/).filter(w => w.length > 0).length} words</span>
             <button
               onClick={handleAnalyze}

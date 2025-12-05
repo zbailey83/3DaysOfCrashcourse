@@ -58,7 +58,7 @@ export const Workspace: React.FC = () => {
                         onClick={() => setActiveTab(tab.id as any)}
                         className={`px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-all ${activeTab === tab.id
                             ? 'bg-primary text-white shadow-glow'
-                            : 'bg-white/5 text-muted hover:bg-white/10 border border-white/10'
+                            : 'bg-black/5 dark:bg-white/5 text-muted hover:bg-black/10 dark:hover:bg-white/10 border border-black/10 dark:border-white/10'
                             }`}
                     >
                         {tab.label}
@@ -71,7 +71,7 @@ export const Workspace: React.FC = () => {
                 {loading ? (
                     <div className="col-span-full text-center py-20 text-muted">Loading workspace...</div>
                 ) : artifacts.length === 0 ? (
-                    <div className="col-span-full text-center py-20 glass-card rounded-[24px] border border-dashed border-white/10">
+                    <div className="col-span-full text-center py-20 glass-card rounded-[24px] border border-dashed border-black/10 dark:border-white/10">
                         <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4 text-muted">
                             <FileText size={32} />
                         </div>
@@ -82,7 +82,7 @@ export const Workspace: React.FC = () => {
                     artifacts.map(artifact => (
                         <div key={artifact.id} className="glass-card rounded-[24px] p-6 hover:shadow-glow hover:-translate-y-1 transition-all group relative">
                             <div className="flex items-start justify-between mb-4">
-                                <div className="p-3 rounded-xl bg-white/5 group-hover:bg-white/10 transition-all">
+                                <div className="p-3 rounded-xl bg-black/5 dark:bg-white/5 group-hover:bg-black/10 dark:group-hover:bg-white/10 transition-all">
                                     {getIcon(artifact.type)}
                                 </div>
                                 <div className="flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -98,12 +98,12 @@ export const Workspace: React.FC = () => {
 
                             <h3 className="font-bold text-text-primary mb-2 line-clamp-1">{artifact.title || 'Untitled'}</h3>
                             <div className="flex items-center justify-between text-xs text-muted">
-                                <span className="bg-white/5 px-2 py-1 rounded-md font-medium border border-white/10">{getLabel(artifact.type)}</span>
+                                <span className="bg-black/5 dark:bg-white/5 px-2 py-1 rounded-md font-medium border border-black/10 dark:border-white/10">{getLabel(artifact.type)}</span>
                                 <span>{new Date(artifact.created_at).toLocaleDateString()}</span>
                             </div>
 
                             {/* Preview Content (Simplified) */}
-                            <div className="mt-4 pt-4 border-t border-white/10">
+                            <div className="mt-4 pt-4 border-t border-black/10 dark:border-white/10">
                                 {artifact.type === 'image' && artifact.content?.url ? (
                                     <div className="h-32 rounded-xl overflow-hidden bg-black/20">
                                         <img src={artifact.content.url} alt={artifact.title} className="w-full h-full object-cover" />

@@ -87,7 +87,7 @@ export const CampaignGenerator: React.FC = () => {
               <input
                 type="text"
                 required
-                className="w-full p-3.5 bg-white/5 border border-white/10 rounded-xl focus:bg-white/10 focus:border-primary/50 focus:ring-4 focus:ring-primary/10 outline-none transition-all font-medium text-white placeholder:text-slate-500"
+                className="w-full p-3.5 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl focus:bg-white/10 focus:border-primary/50 focus:ring-4 focus:ring-primary/10 outline-none transition-all font-medium text-slate-900 dark:text-white placeholder:text-slate-500"
                 placeholder="e.g., EcoStride"
                 value={businessName}
                 onChange={(e) => setBusinessName(e.target.value)}
@@ -101,7 +101,7 @@ export const CampaignGenerator: React.FC = () => {
               <input
                 type="text"
                 required
-                className="w-full p-3.5 bg-white/5 border border-white/10 rounded-xl focus:bg-white/10 focus:border-primary/50 focus:ring-4 focus:ring-primary/10 outline-none transition-all font-medium text-white placeholder:text-slate-500"
+                className="w-full p-3.5 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl focus:bg-white/10 focus:border-primary/50 focus:ring-4 focus:ring-primary/10 outline-none transition-all font-medium text-slate-900 dark:text-white placeholder:text-slate-500"
                 placeholder="e.g., Urban professionals, 25-35"
                 value={targetAudience}
                 onChange={(e) => setTargetAudience(e.target.value)}
@@ -114,7 +114,7 @@ export const CampaignGenerator: React.FC = () => {
               </label>
               <textarea
                 required
-                className="w-full p-3.5 bg-white/5 border border-white/10 rounded-xl focus:bg-white/10 focus:border-primary/50 focus:ring-4 focus:ring-primary/10 outline-none transition-all h-24 font-medium text-white placeholder:text-slate-500 resize-none"
+                className="w-full p-3.5 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl focus:bg-white/10 focus:border-primary/50 focus:ring-4 focus:ring-primary/10 outline-none transition-all h-24 font-medium text-slate-900 dark:text-white placeholder:text-slate-500 resize-none"
                 placeholder="Describe what you're promoting..."
                 value={keyOffer}
                 onChange={(e) => setKeyOffer(e.target.value)}
@@ -128,7 +128,7 @@ export const CampaignGenerator: React.FC = () => {
               <input
                 type="text"
                 required
-                className="w-full p-3.5 bg-white/5 border border-white/10 rounded-xl focus:bg-white/10 focus:border-primary/50 focus:ring-4 focus:ring-primary/10 outline-none transition-all font-medium text-white placeholder:text-slate-500"
+                className="w-full p-3.5 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl focus:bg-white/10 focus:border-primary/50 focus:ring-4 focus:ring-primary/10 outline-none transition-all font-medium text-slate-900 dark:text-white placeholder:text-slate-500"
                 placeholder="e.g., Drive website traffic, Brand awareness"
                 value={mainGoal}
                 onChange={(e) => setMainGoal(e.target.value)}

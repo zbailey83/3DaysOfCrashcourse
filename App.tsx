@@ -24,7 +24,7 @@ export type ViewState =
 
 const App: React.FC = () => {
   const [session, setSession] = useState<Session | null>(null);
-  const [currentView, setCurrentView] = useState<ViewState>({ type: 'dashboard' });
+  const [currentView, setCurrentView] = useState<ViewState>({ type: 'profile' });
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [theme, setTheme] = useState<'light' | 'dark'>('dark');
 
@@ -81,7 +81,7 @@ const App: React.FC = () => {
       case 'workspace':
         return <Workspace />;
       case 'profile':
-        return <Profile />;
+        return <Profile courses={COURSES} onNavigate={handleNavigate} />;
       case 'course':
         const course = COURSES.find(c => c.id === currentView.courseId);
         if (!course) return <div>Course not found</div>;

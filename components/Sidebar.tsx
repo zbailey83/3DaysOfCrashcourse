@@ -1,6 +1,6 @@
 import React from 'react';
 import { ViewState } from '../App';
-import { Home, PenTool, Image as ImageIcon, Search, X, Sparkles, Sliders, FolderOpen, User, Sun, Moon } from 'lucide-react';
+import { Home, PenTool, Image as ImageIcon, Search, X, Sparkles, Sliders, FolderOpen, User, Sun, Moon, LayoutDashboard, BookOpen } from 'lucide-react';
 import { StreakCounter } from './StreakCounter';
 
 interface SidebarProps {
@@ -26,7 +26,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onNavigate, currentView, onClo
   return (
     <div className="flex flex-col h-full p-6 relative glass-panel border-r border-border-light">
       <div className="flex items-center justify-between mb-10 px-2 pt-2">
-        <div className="flex items-center space-x-3 cursor-pointer" onClick={() => handleNav({ type: 'dashboard' })}>
+        <div className="flex items-center space-x-3 cursor-pointer" onClick={() => handleNav({ type: 'profile' })}>
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-glow group hover:scale-105 transition-transform">
             <Sparkles className="text-white w-5 h-5 group-hover:rotate-12 transition-transform" />
           </div>
@@ -51,11 +51,18 @@ export const Sidebar: React.FC<SidebarProps> = ({ onNavigate, currentView, onClo
         <div className="mb-8">
           <h2 className="text-[11px] font-bold text-muted uppercase tracking-widest mb-4 px-5">Dashboard</h2>
           <button
+            onClick={() => handleNav({ type: 'profile' })}
+            className={navItemClass(currentView.type === 'profile')}
+          >
+            <LayoutDashboard size={20} className="mr-3 stroke-[1.5]" />
+            <span className="font-medium text-[15px]">Dashboard</span>
+          </button>
+          <button
             onClick={() => handleNav({ type: 'dashboard' })}
             className={navItemClass(currentView.type === 'dashboard')}
           >
-            <Home size={20} className="mr-3 stroke-[1.5]" />
-            <span className="font-medium text-[15px]">Overview</span>
+            <BookOpen size={20} className="mr-3 stroke-[1.5]" />
+            <span className="font-medium text-[15px]">Courses</span>
           </button>
           <button
             onClick={() => handleNav({ type: 'workspace' })}
@@ -63,13 +70,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ onNavigate, currentView, onClo
           >
             <FolderOpen size={20} className="mr-3 stroke-[1.5]" />
             <span className="font-medium text-[15px]">My Workspace</span>
-          </button>
-          <button
-            onClick={() => handleNav({ type: 'profile' })}
-            className={navItemClass(currentView.type === 'profile')}
-          >
-            <User size={20} className="mr-3 stroke-[1.5]" />
-            <span className="font-medium text-[15px]">Profile</span>
           </button>
         </div>
 

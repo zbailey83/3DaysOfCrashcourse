@@ -176,7 +176,7 @@ export const ImageGenLab: React.FC<ImageGenLabProps> = ({ initialAction }) => {
               <div>
                 <label className="block text-xs font-bold text-muted uppercase tracking-wider mb-2">Visual Description</label>
                 <textarea
-                  className="w-full p-4 bg-white/5 border border-white/10 rounded-2xl focus:bg-white/10 focus:border-primary/50 focus:ring-4 focus:ring-primary/10 outline-none transition-all h-32 resize-none font-medium text-white placeholder:text-slate-500"
+                  className="w-full p-4 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-2xl focus:bg-white/10 focus:border-primary/50 focus:ring-4 focus:ring-primary/10 outline-none transition-all h-32 resize-none font-medium text-slate-900 dark:text-white placeholder:text-slate-500"
                   placeholder="A futuristic city with flying cars at sunset..."
                   value={prompt}
                   onChange={(e) => setPrompt(e.target.value)}
@@ -195,7 +195,7 @@ export const ImageGenLab: React.FC<ImageGenLabProps> = ({ initialAction }) => {
                     <select
                       value={style}
                       onChange={(e) => setStyle(e.target.value)}
-                      className="w-full p-2.5 bg-white/5 border border-white/10 rounded-xl text-sm font-medium text-white focus:outline-none focus:border-primary [&>option]:bg-slate-900 [&>option]:text-white"
+                      className="w-full p-2.5 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl text-sm font-medium text-slate-900 dark:text-white focus:outline-none focus:border-primary [&>option]:bg-white dark:[&>option]:bg-slate-900 [&>option]:text-slate-900 dark:[&>option]:text-white"
                     >
                       {['Cinematic', 'Photorealistic', '3D Render', 'Oil Painting', 'Cyberpunk', 'Minimalist', 'Anime', 'Watercolor'].map(s => (
                         <option key={s} value={s}>{s}</option>
@@ -207,7 +207,7 @@ export const ImageGenLab: React.FC<ImageGenLabProps> = ({ initialAction }) => {
                     <select
                       value={lighting}
                       onChange={(e) => setLighting(e.target.value)}
-                      className="w-full p-2.5 bg-white/5 border border-white/10 rounded-xl text-sm font-medium text-white focus:outline-none focus:border-primary [&>option]:bg-slate-900 [&>option]:text-white"
+                      className="w-full p-2.5 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl text-sm font-medium text-slate-900 dark:text-white focus:outline-none focus:border-primary [&>option]:bg-white dark:[&>option]:bg-slate-900 [&>option]:text-slate-900 dark:[&>option]:text-white"
                     >
                       {['Default', 'Studio', 'Golden Hour', 'Neon', 'Natural', 'Dramatic', 'Softbox'].map(s => (
                         <option key={s} value={s}>{s}</option>
@@ -219,7 +219,7 @@ export const ImageGenLab: React.FC<ImageGenLabProps> = ({ initialAction }) => {
                     <select
                       value={camera}
                       onChange={(e) => setCamera(e.target.value)}
-                      className="w-full p-2.5 bg-white/5 border border-white/10 rounded-xl text-sm font-medium text-white focus:outline-none focus:border-primary [&>option]:bg-slate-900 [&>option]:text-white"
+                      className="w-full p-2.5 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl text-sm font-medium text-slate-900 dark:text-white focus:outline-none focus:border-primary [&>option]:bg-white dark:[&>option]:bg-slate-900 [&>option]:text-slate-900 dark:[&>option]:text-white"
                     >
                       {['Default', 'Wide Angle', 'Macro', 'Drone', 'Portrait', 'Telephoto'].map(s => (
                         <option key={s} value={s}>{s}</option>
@@ -231,7 +231,7 @@ export const ImageGenLab: React.FC<ImageGenLabProps> = ({ initialAction }) => {
                     <select
                       value={mood}
                       onChange={(e) => setMood(e.target.value)}
-                      className="w-full p-2.5 bg-white/5 border border-white/10 rounded-xl text-sm font-medium text-white focus:outline-none focus:border-primary [&>option]:bg-slate-900 [&>option]:text-white"
+                      className="w-full p-2.5 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl text-sm font-medium text-slate-900 dark:text-white focus:outline-none focus:border-primary [&>option]:bg-white dark:[&>option]:bg-slate-900 [&>option]:text-slate-900 dark:[&>option]:text-white"
                     >
                       {['Neutral', 'Happy', 'Dark', 'Ethereal', 'Energetic', 'Calm'].map(s => (
                         <option key={s} value={s}>{s}</option>
@@ -246,7 +246,7 @@ export const ImageGenLab: React.FC<ImageGenLabProps> = ({ initialAction }) => {
                   <input
                     type="number"
                     placeholder="Random"
-                    className="w-full p-2.5 bg-white/5 border border-white/10 rounded-xl text-sm font-medium text-white focus:outline-none focus:border-primary placeholder:text-slate-500"
+                    className="w-full p-2.5 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl text-sm font-medium text-slate-900 dark:text-white focus:outline-none focus:border-primary placeholder:text-slate-500"
                     value={seed}
                     onChange={(e) => setSeed(e.target.value)}
                   />
@@ -343,7 +343,7 @@ export const ImageGenLab: React.FC<ImageGenLabProps> = ({ initialAction }) => {
                 <input
                   type="text"
                   placeholder="Search prompts..."
-                  className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-primary/50 text-sm font-medium text-white placeholder:text-slate-500"
+                  className="w-full pl-10 pr-4 py-2.5 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl focus:outline-none focus:border-primary/50 text-sm font-medium text-slate-900 dark:text-white placeholder:text-slate-500"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />

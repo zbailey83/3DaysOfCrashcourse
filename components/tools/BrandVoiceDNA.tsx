@@ -77,7 +77,7 @@ This brand aims for a balance defined by the sliders above. Content should utili
                                     max="10"
                                     value={sliders[item.key as keyof typeof sliders]}
                                     onChange={(e) => handleSliderChange(item.key as keyof typeof sliders, parseInt(e.target.value))}
-                                    className="w-full h-2 bg-white/10 rounded-lg appearance-none cursor-pointer accent-secondary"
+                                    className="w-full h-2 bg-black/10 dark:bg-white/10 rounded-lg appearance-none cursor-pointer accent-secondary"
                                 />
                                 <div className="text-center text-xs font-bold text-secondary mt-1">{sliders[item.key as keyof typeof sliders]}</div>
                             </div>
@@ -89,7 +89,7 @@ This brand aims for a balance defined by the sliders above. Content should utili
                         <label className="block text-sm font-bold text-text-primary mb-2">Power Words (comma separated)</label>
                         <input
                             type="text"
-                            className="w-full p-4 bg-white/5 border border-white/10 rounded-2xl focus:bg-white/10 focus:border-secondary/50 focus:ring-4 focus:ring-secondary/10 outline-none transition-all font-medium text-white placeholder:text-slate-500"
+                            className="w-full p-4 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-2xl focus:bg-white/10 focus:border-secondary/50 focus:ring-4 focus:ring-secondary/10 outline-none transition-all font-medium text-slate-900 dark:text-white placeholder:text-slate-500"
                             placeholder="e.g., Innovative, Seamless, Empower"
                             value={powerWords}
                             onChange={(e) => setPowerWords(e.target.value)}
@@ -100,7 +100,7 @@ This brand aims for a balance defined by the sliders above. Content should utili
                         <label className="block text-sm font-bold text-text-primary mb-2">Never-Say Phrases (comma separated)</label>
                         <input
                             type="text"
-                            className="w-full p-4 bg-white/5 border border-white/10 rounded-2xl focus:bg-white/10 focus:border-secondary/50 focus:ring-4 focus:ring-secondary/10 outline-none transition-all font-medium text-white placeholder:text-slate-500"
+                            className="w-full p-4 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-2xl focus:bg-white/10 focus:border-secondary/50 focus:ring-4 focus:ring-secondary/10 outline-none transition-all font-medium text-slate-900 dark:text-white placeholder:text-slate-500"
                             placeholder="e.g., Cheap, Stuff, Maybe"
                             value={neverSay}
                             onChange={(e) => setNeverSay(e.target.value)}
