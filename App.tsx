@@ -10,6 +10,7 @@ import { AnalyticsLab } from './components/tools/AnalyticsLab';
 import { Workspace } from './components/Workspace';
 import { Profile } from './components/Profile';
 import { Auth } from './components/Auth';
+import { SplashPage } from './components/SplashPage';
 import { COURSES } from './constants';
 import { Menu, Sun, Moon } from 'lucide-react';
 import { supabase } from './lib/supabase';
@@ -17,6 +18,7 @@ import { Session } from '@supabase/supabase-js';
 
 // Simple view router state type
 export type ViewState =
+  | { type: 'splash' }
   | { type: 'dashboard' }
   | { type: 'workspace' }
   | { type: 'profile' }
@@ -25,7 +27,7 @@ export type ViewState =
 
 const App: React.FC = () => {
   const [session, setSession] = useState<Session | null>(null);
-  const [currentView, setCurrentView] = useState<ViewState>({ type: 'profile' });
+  const [currentView, setCurrentView] = useState<ViewState>({ type: 'splash' });
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [theme, setTheme] = useState<'light' | 'dark'>('dark');
 
@@ -84,13 +86,13 @@ const App: React.FC = () => {
       case 'profile':
         return <Profile courses={COURSES} onNavigate={handleNavigate} />;
       case 'course':
-        const course = COURSES.find(c => c.id === currentView.courseId);
+        const course = COURSES.find(c => c.id === (currentView as any).courseId);
         if (!course) return <div>Course not found</div>;
-        return <CourseView course={course} moduleId={currentView.moduleId} onBack={() => handleNavigate({ type: 'dashboard' })} />;
+        return <CourseView course={course} moduleId={(currentView as any).moduleId} onBack={() => handleNavigate({ type: 'dashboard' })} />;
       case 'tool':
-        switch (currentView.toolName) {
+        switch ((currentView as any).toolName) {
           case 'campaign': return <CampaignGenerator />;
-          case 'image': return <ImageGenLab initialAction={currentView.action} />;
+          case 'image': return <ImageGenLab initialAction={(currentView as any).action} />;
           case 'seo': return <SeoAnalyzer />;
           case 'brand-voice': return <BrandVoiceDNA />;
           case 'analytics': return <AnalyticsLab />;
@@ -103,6 +105,10 @@ const App: React.FC = () => {
 
   if (!session) {
     return <Auth />;
+  }
+
+  if (currentView.type === 'splash') {
+    return <SplashPage onEnter={() => handleNavigate({ type: 'dashboard' })} />;
   }
 
   return (
