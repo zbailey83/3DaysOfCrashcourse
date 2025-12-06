@@ -14,6 +14,7 @@ export interface Module {
     type: 'video' | 'reading' | 'lab';
     videoUrl?: string;
     quiz?: QuizQuestion[];
+    toolId?: 'campaign' | 'image' | 'seo' | 'brand-voice' | 'analytics';
 }
 
 export interface Course {
@@ -56,7 +57,7 @@ export interface UserArtifact {
     user_id: string;
     course_id?: string;
     module_id?: string;
-    type: 'campaign' | 'image' | 'seo_analysis' | 'brand_voice';
+    type: 'campaign' | 'image' | 'seo_analysis' | 'brand_voice' | 'analytics_report';
     title: string;
     content: any; // JSON data
     created_at: string;

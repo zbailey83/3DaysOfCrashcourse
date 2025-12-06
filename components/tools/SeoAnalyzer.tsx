@@ -87,14 +87,14 @@ export const SeoAnalyzer: React.FC = () => {
             </label>
             <input
               type="text"
-              className="w-full p-3 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl text-sm font-medium text-slate-900 dark:text-white focus:outline-none focus:border-primary placeholder:text-slate-500"
+              className="w-full p-3 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl text-sm font-medium text-text-primary focus:outline-none focus:border-primary placeholder:text-muted shadow-inner"
               placeholder="e.g., 'AI marketing tools'"
               value={targetKeyword}
               onChange={(e) => setTargetKeyword(e.target.value)}
             />
           </div>
           <textarea
-            className="w-full p-8 h-48 outline-none resize-none bg-transparent text-slate-900 dark:text-white text-lg placeholder:text-slate-500 font-light leading-relaxed"
+            className="w-full p-8 h-48 outline-none resize-none bg-transparent text-text-primary text-lg placeholder:text-muted font-light leading-relaxed scrollbar-hide"
             placeholder="Paste your content here to begin analysis..."
             value={text}
             onChange={(e) => setText(e.target.value)}
@@ -146,7 +146,7 @@ export const SeoAnalyzer: React.FC = () => {
                     />
                   </svg>
                   <div className="absolute flex flex-col items-center">
-                    <span className="text-4xl font-display font-bold text-white">{result.score}</span>
+                    <span className="text-4xl font-display font-bold text-text-primary">{result.score}</span>
                     <span className="text-xs font-medium text-muted">/ 100</span>
                   </div>
                 </div>

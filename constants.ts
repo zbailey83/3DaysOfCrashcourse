@@ -43,7 +43,7 @@ This is not theory. Today is execution.
         id: 'm1.2-setup',
         title: 'Module 1.2: AI Tool Arsenal Setup',
         duration: '45 min',
-        type: 'lab',
+        type: 'lab' as const,
         content: `
 ### Tool Stack Setup
 We’re getting your stack online so nothing slows you down later.
@@ -69,7 +69,7 @@ We’re getting your stack online so nothing slows you down later.
         id: 'ex-1-prompt',
         title: 'Live Exercise 1: First Prompt Test',
         duration: '30 min',
-        type: 'lab',
+        type: 'lab' as const,
         content: `
 ### Business Input Template
 Input your business into the template, generate headlines, and test your results.
@@ -84,13 +84,14 @@ Input your business into the template, generate headlines, and test your results
 **Deliverable:**
 1. Screenshot of AI dashboard
 2. 3 refined headlines
-        `
+        `,
+        toolId: 'campaign'
       },
       {
         id: 'm2.1-voice',
         title: 'Module 2.1: Voice DNA Extraction',
         duration: '30 min',
-        type: 'reading',
+        type: 'reading' as const,
         content: `
 ### Voice Analysis Framework
 Codify the exact rules that make your voice distinct.
@@ -106,6 +107,7 @@ Codify the exact rules that make your voice distinct.
 *   "Signature phrases"
 *   Phrases to avoid
         `,
+        toolId: 'brand-voice',
         quiz: [
           {
             id: 'q1-voice',
@@ -120,7 +122,7 @@ Codify the exact rules that make your voice distinct.
         id: 'proj-1-brand-brief',
         title: 'Live Project: Brand Voice Brief',
         duration: '45 min',
-        type: 'lab',
+        type: 'lab' as const,
         content: `
 ### Build These Assets
 1.  **AI-Refined Mission Statement**
@@ -128,13 +130,14 @@ Codify the exact rules that make your voice distinct.
 3.  **10 Sample Phrases in Brand Voice**
 4.  **5 Never-Say Phrases**
 5.  **Tone Calibration Scale**
-        `
+        `,
+        toolId: 'brand-voice'
       },
       {
         id: 'm2.2-long-form',
         title: 'Module 2.2: Long-Form Content Generation',
         duration: '15 min',
-        type: 'reading',
+        type: 'reading' as const,
         content: `
 ### Reliable Structures
 *   **Listicle Format**
@@ -145,13 +148,14 @@ Codify the exact rules that make your voice distinct.
 **SEO & Human Layer:**
 *   Use 1 primary keyword, 2-3 secondary.
 *   Add contrarian statements, personal anecdotes, specific details.
-        `
+        `,
+        toolId: 'seo'
       },
       {
         id: 'ex-2-blog',
         title: 'Live Exercise 2: First Blog Post',
         duration: '60 min',
-        type: 'lab',
+        type: 'lab' as const,
         content: `
 ### 1,500-word Article
 Write a 1,500-word article using the course’s blog-generation prompt pack.
@@ -166,7 +170,7 @@ Write a 1,500-word article using the course’s blog-generation prompt pack.
         id: 'm3.1-image-prompt',
         title: 'Module 3.1: Image Prompt Engineering',
         duration: '30 min',
-        type: 'reading',
+        type: 'reading' as const,
         content: `
 ### Anatomy of a Strong Image Prompt
 1.  **Subject**
@@ -180,6 +184,7 @@ Write a 1,500-word article using the course’s blog-generation prompt pack.
 *   Use seed numbers
 *   Use a consistent adjective stack
         `,
+        toolId: 'image',
         quiz: [
           {
             id: 'q1-image',
@@ -194,7 +199,7 @@ Write a 1,500-word article using the course’s blog-generation prompt pack.
         id: 'sprint-1-graphics',
         title: 'Sprint Challenge 1: 10 Graphics',
         duration: '60 min',
-        type: 'lab',
+        type: 'lab' as const,
         content: `
 ### Create 10 Graphics in 60 Minutes
 *   3 social posts
@@ -203,7 +208,8 @@ Write a 1,500-word article using the course’s blog-generation prompt pack.
 *   2 LI carousel slides
 
 **Submission:** Upload best 3 to gallery.
-        `
+        `,
+        toolId: 'image'
       }
     ]
   },
@@ -218,7 +224,7 @@ Write a 1,500-word article using the course’s blog-generation prompt pack.
         id: 'm4.1-calendar',
         title: 'Module 4.1: Calendar Strategy',
         duration: '30 min',
-        type: 'reading',
+        type: 'reading' as const,
         content: `
 ### Content Pillars
 *   **Educate:** tutorials, frameworks
@@ -234,7 +240,7 @@ Batch 10 hooks → turn into 30 posts → turn into 90 variations.
         id: 'ex-3-calendar',
         title: 'Live Exercise 3: 30-Day Calendar',
         duration: '45 min',
-        type: 'lab',
+        type: 'lab' as const,
         content: `
 ### Fill the Calendar
 Using the "Calendar Architect" prompt, generate a 30-day plan.
@@ -243,13 +249,14 @@ Using the "Calendar Architect" prompt, generate a 30-day plan.
 *   Mix of formats (video, text, image)
 *   Aligned with content pillars
 *   Realistic production schedule
-        `
+        `,
+        toolId: 'campaign'
       },
       {
         id: 'm4.2-repurposing',
         title: 'Module 4.2: The Repurposing Engine',
         duration: '20 min',
-        type: 'reading',
+        type: 'reading' as const,
         content: `
 ### One Idea, Many Assets
 **Source:** 1 YouTube Video (10 min)
@@ -268,7 +275,7 @@ Using the "Calendar Architect" prompt, generate a 30-day plan.
         id: 'm5.1-video-script',
         title: 'Module 5.1: AI Video Scripting',
         duration: '30 min',
-        type: 'reading',
+        type: 'reading' as const,
         content: `
 ### Script Structure
 1.  **The Hook (0-3s):** Visual + Verbal interruption.
@@ -278,13 +285,14 @@ Using the "Calendar Architect" prompt, generate a 30-day plan.
 
 **AI Prompting:**
 "Write a script for a 60-second vertical video about [topic] that is fast-paced, uses visual cues, and ends with a question."
-        `
+        `,
+        toolId: 'campaign'
       },
       {
         id: 'ex-4-video',
         title: 'Live Exercise 4: Record 3 Shorts',
         duration: '60 min',
-        type: 'lab',
+        type: 'lab' as const,
         content: `
 ### Action!
 1.  Generate 3 scripts.
@@ -301,7 +309,7 @@ Using the "Calendar Architect" prompt, generate a 30-day plan.
         id: 'm5.2-automation',
         title: 'Module 5.2: Basic Automation',
         duration: '30 min',
-        type: 'reading',
+        type: 'reading' as const,
         content: `
 ### Tools for Automation
 *   **Make.com / Zapier:** Connect apps.
@@ -315,7 +323,7 @@ New Blog Post (RSS) → ChatGPT (Summarize) → Buffer (Draft Tweet).
         id: 'sprint-2-campaign',
         title: 'Sprint Challenge 2: Full Campaign',
         duration: '90 min',
-        type: 'lab',
+        type: 'lab' as const,
         content: `
 ### The "Launch" Simulation
 Create a full campaign for a fictional product launch.
@@ -325,7 +333,8 @@ Create a full campaign for a fictional product launch.
 *   1 Video Script
 
 **Goal:** Cohesion and speed.
-        `
+        `,
+        toolId: 'campaign'
       }
     ]
   },
@@ -340,7 +349,7 @@ Create a full campaign for a fictional product launch.
         id: 'm6.1-analytics',
         title: 'Module 6.1: Reading the Data',
         duration: '30 min',
-        type: 'reading',
+        type: 'reading' as const,
         content: `
 ### Metrics That Matter
 *   **Reach/Impressions:** Top of funnel.
@@ -350,13 +359,14 @@ Create a full campaign for a fictional product launch.
 
 **AI Analysis:**
 Feed your analytics export to ChatGPT: "Analyze this data and tell me which 3 topics performed best and why."
-        `
+        `,
+        toolId: 'analytics'
       },
       {
         id: 'm6.2-refinement',
         title: 'Module 6.2: Refining Your Models',
         duration: '30 min',
-        type: 'reading',
+        type: 'reading' as const,
         content: `
 ### Feedback Loop
 1.  **Publish**
@@ -371,20 +381,21 @@ Feed your analytics export to ChatGPT: "Analyze this data and tell me which 3 to
         id: 'ex-5-audit',
         title: 'Live Exercise 5: Content Audit',
         duration: '45 min',
-        type: 'lab',
+        type: 'lab' as const,
         content: `
 ### Audit Your Past 48 Hours
 Review everything you created in Day 1 & 2.
 *   What is "on brand"?
 *   What feels "AI-generated"?
 *   Fix the prompts that generated the weak content.
-        `
+        `,
+        toolId: 'analytics'
       },
       {
         id: 'm7.1-advanced',
         title: 'Module 7.1: Advanced Workflows',
         duration: '45 min',
-        type: 'reading',
+        type: 'reading' as const,
         content: `
 ### Multi-Step Agents
 Using tools like AutoGPT or BabyAGI (conceptually) or chaining prompts.
@@ -400,7 +411,7 @@ Using tools like AutoGPT or BabyAGI (conceptually) or chaining prompts.
         id: 'final-project',
         title: 'Final Project: The 30-Day Machine',
         duration: '120 min',
-        type: 'lab',
+        type: 'lab' as const,
         content: `
 ### Graduation Project
 Build your sustainable content machine.
@@ -410,7 +421,8 @@ Build your sustainable content machine.
 4.  **1 Week of Content Scheduled**
 
 **Congratulations! You have stopped the grind.**
-        `
+        `,
+        toolId: 'campaign'
       }
     ]
   }

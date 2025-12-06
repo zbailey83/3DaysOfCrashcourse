@@ -113,3 +113,32 @@ export const analyzeSeoText = async (text: string, targetKeyword?: string) => {
 
   return response.text;
 };
+
+export const analyzeAnalyticsData = async (dataInput: string, context?: string) => {
+  const client = getClient();
+
+  const prompt = `
+    Act as a senior data analyst. Analyze the following marketing data/metrics:
+    "${dataInput}"
+    
+    Context: ${context || 'General marketing performance'}
+
+    Return a JSON object with:
+    - "summary": A brief executive summary of performance.
+    - "top_performing": array of strings (what is working best).
+    - "underperforming": array of strings (what needs attention).
+    - "trends": array of identified patterns.
+    - "recommendations": array of specific actionable steps to improve.
+    - "roi_analysis": string (brief assessment of return on effort/spend).
+  `;
+
+  const response = await client.models.generateContent({
+    model: GEMINI_TEXT_MODEL,
+    contents: prompt,
+    config: {
+      responseMimeType: 'application/json'
+    }
+  });
+
+  return response.text;
+};

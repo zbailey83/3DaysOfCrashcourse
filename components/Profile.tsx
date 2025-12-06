@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { UserProfile, Course } from '../types';
 import { ViewState } from '../App';
-import { Camera, User, LogOut, Save, Loader2, PlayCircle, Clock, ArrowRight, Zap } from 'lucide-react';
+import { Camera, User, LogOut, Save, Loader2, PlayCircle, Clock, ArrowRight, Zap, Mic, LayoutDashboard } from 'lucide-react';
 import { StreakCounter } from './StreakCounter';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { useProgress } from '../hooks/useProgress';
@@ -13,13 +13,6 @@ interface ProfileProps {
     courses: Course[];
     onNavigate: (view: ViewState) => void;
 }
-
-const data = [
-    { name: 'Writing', score: 85 },
-    { name: 'SEO', score: 65 },
-    { name: 'Visuals', score: 92 },
-    { name: 'Strategy', score: 70 },
-];
 
 export const Profile: React.FC<ProfileProps> = ({ courses, onNavigate }) => {
     const [loading, setLoading] = useState(true);
@@ -172,6 +165,26 @@ export const Profile: React.FC<ProfileProps> = ({ courses, onNavigate }) => {
     const totalModules = courses.reduce((acc, course) => acc + course.modules.length, 0);
     const overallProgress = totalModules > 0 ? Math.round((stats.completedModules / totalModules) * 100) : 0;
 
+    // Calculate dynamic skill scores
+    const skillData = React.useMemo(() => {
+        const writingCount = artifacts.filter(a => a.type === 'campaign' || a.type === 'brand_voice').length;
+        const seoCount = artifacts.filter(a => a.type === 'seo_analysis').length;
+        const visualsCount = artifacts.filter(a => a.type === 'image').length;
+        const strategyCount = artifacts.filter(a => a.type === 'analytics_report').length;
+
+        // Base scores on progress (30%) + artifacts (70%)
+        // Normalized to 0-100
+        const moduleCompletion = stats.completedModules / (totalModules || 1);
+        const baseScore = Math.round(moduleCompletion * 30);
+
+        return [
+            { name: 'Writing', score: Math.min(100, baseScore + (writingCount * 10)) },
+            { name: 'SEO', score: Math.min(100, baseScore + (seoCount * 15)) },
+            { name: 'Visuals', score: Math.min(100, baseScore + (visualsCount * 5)) },
+            { name: 'Strategy', score: Math.min(100, baseScore + (strategyCount * 20)) },
+        ];
+    }, [artifacts, stats.completedModules, totalModules]);
+
 
     if (loading && !profile) {
         return (
@@ -259,11 +272,10 @@ export const Profile: React.FC<ProfileProps> = ({ courses, onNavigate }) => {
                         </div>
                     </div>
 
-                    <StreakCounter className="glass-card border-white/10 shadow-sm" />
                 </div>
 
                 {/* Right Column: Progress & Courses */}
-                <div className="lg:col-span-2 space-y-8">
+                <div className="lg:col-span-2 space-y-6">
                     {/* Overall Progress Card */}
                     <div className="bg-gradient-to-br from-primary to-secondary p-8 rounded-[24px] shadow-glow text-white relative overflow-hidden group hover:scale-[1.02] transition-all duration-300">
                         <div className="absolute top-0 right-0 w-48 h-48 bg-white/10 rounded-full -mr-16 -mt-16 blur-2xl group-hover:scale-110 transition-transform duration-700"></div>
@@ -278,45 +290,38 @@ export const Profile: React.FC<ProfileProps> = ({ courses, onNavigate }) => {
                         <p className="text-sm text-blue-50 font-medium relative z-10">Level {Math.floor(overallProgress / 20) + 1}: {overallProgress > 80 ? 'Master' : overallProgress > 50 ? 'Advanced' : 'Beginner'}</p>
                     </div>
 
-                    {/* Skill Matrix */}
-                    <div className="glass-card p-8 rounded-[24px] hover:shadow-glow transition-all duration-300">
-                        <div className="flex items-center justify-between mb-8">
-                            <h3 className="text-xl font-display font-bold text-text-primary">Skill Matrix</h3>
+                    {/* Brand Voice Section - Moved here */}
+                    <div className="glass-card p-6 rounded-[24px] border border-primary/20 bg-primary/5 hover:bg-primary/10 transition-colors">
+                        <div className="flex items-center justify-between mb-4">
+                            <h3 className="font-bold text-text-primary flex items-center text-lg">
+                                <Mic size={20} className="mr-3 text-primary" /> Brand Voice DNA
+                            </h3>
+                            {artifacts.some(a => a.type === 'brand_voice') && (
+                                <span className="text-[10px] font-bold bg-success/20 text-success px-2 py-1 rounded-full">Active</span>
+                            )}
                         </div>
-                        <div className="h-64 w-full">
-                            <ResponsiveContainer width="100%" height="100%">
-                                <BarChart data={data}>
-                                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border-light)" />
-                                    <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: 'var(--text-secondary)', fontSize: 12, fontWeight: 500 }} dy={10} />
-                                    <YAxis axisLine={false} tickLine={false} tick={{ fill: 'var(--text-secondary)', fontSize: 12 }} />
-                                    <Tooltip
-                                        cursor={{ fill: 'var(--surface-glass-soft)' }}
-                                        contentStyle={{
-                                            borderRadius: '16px',
-                                            border: '1px solid var(--border-light)',
-                                            background: 'var(--surface-glass)',
-                                            boxShadow: 'var(--glass-shadow)',
-                                            padding: '12px',
-                                            fontFamily: 'Inter',
-                                            color: 'var(--text-primary)'
-                                        }}
-                                        itemStyle={{ color: 'var(--text-primary)' }}
-                                        labelStyle={{ color: 'var(--text-secondary)', marginBottom: '0.5rem' }}
-                                    />
-                                    <Bar dataKey="score" radius={[6, 6, 6, 6]} barSize={40} animationDuration={1500}>
-                                        {data.map((entry, index) => (
-                                            <Cell key={`cell-${index}`} fill="url(#colorGradient)" />
-                                        ))}
-                                    </Bar>
-                                    <defs>
-                                        <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
-                                            <stop offset="0%" stopColor="var(--color-primary)" stopOpacity={1} />
-                                            <stop offset="100%" stopColor="var(--color-secondary)" stopOpacity={0.8} />
-                                        </linearGradient>
-                                    </defs>
-                                </BarChart>
-                            </ResponsiveContainer>
-                        </div>
+
+                        {artifacts.some(a => a.type === 'brand_voice') ? (
+                            <div className="flex items-center justify-between">
+                                <p className="text-sm text-muted">Your brand voice is configured. We use this DNA to tailor your content.</p>
+                                <button
+                                    onClick={() => onNavigate({ type: 'tool', toolName: 'brand-voice' })}
+                                    className="px-4 py-2 rounded-xl text-primary font-bold bg-white/10 hover:bg-white/20 transition-all text-sm border border-primary/20 whitespace-nowrap ml-4"
+                                >
+                                    Refine DNA
+                                </button>
+                            </div>
+                        ) : (
+                            <div className="flex items-center justify-between">
+                                <p className="text-sm text-muted">Configure your brand voice to ensure consistently on-brand AI content.</p>
+                                <button
+                                    onClick={() => onNavigate({ type: 'tool', toolName: 'brand-voice' })}
+                                    className="px-4 py-2 rounded-xl text-white font-bold bg-gradient-to-r from-primary to-secondary hover:shadow-glow transition-all text-sm animate-pulse-slow whitespace-nowrap ml-4"
+                                >
+                                    Configure
+                                </button>
+                            </div>
+                        )}
                     </div>
 
                     {/* Continue Learning */}

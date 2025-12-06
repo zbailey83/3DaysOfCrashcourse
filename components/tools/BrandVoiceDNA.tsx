@@ -76,7 +76,7 @@ This brand aims for a balance defined by the sliders above. Content should utili
     return (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full animate-slide-up">
             {/* Input Section */}
-            <div className="glass-card p-8 rounded-[24px] h-fit">
+            <div className="glass-card p-6 md:p-8 rounded-[24px] h-fit">
                 <div className="mb-8">
                     <div className="inline-flex items-center justify-center p-3 bg-secondary/10 rounded-xl mb-4">
                         <Sliders className="text-secondary w-6 h-6" />
@@ -120,7 +120,7 @@ This brand aims for a balance defined by the sliders above. Content should utili
                         <label className="block text-sm font-bold text-text-primary mb-2">Power Words (comma separated)</label>
                         <input
                             type="text"
-                            className="w-full p-4 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-2xl focus:bg-white/10 focus:border-secondary/50 focus:ring-4 focus:ring-secondary/10 outline-none transition-all font-medium text-slate-900 dark:text-white placeholder:text-slate-500"
+                            className="w-full p-4 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-2xl focus:bg-white/10 focus:border-secondary/50 focus:ring-4 focus:ring-secondary/10 outline-none transition-all font-medium text-text-primary placeholder:text-muted shadow-inner"
                             placeholder="e.g., Innovative, Seamless, Empower"
                             value={powerWords}
                             onChange={(e) => setPowerWords(e.target.value)}
@@ -131,7 +131,7 @@ This brand aims for a balance defined by the sliders above. Content should utili
                         <label className="block text-sm font-bold text-text-primary mb-2">Never-Say Phrases (comma separated)</label>
                         <input
                             type="text"
-                            className="w-full p-4 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-2xl focus:bg-white/10 focus:border-secondary/50 focus:ring-4 focus:ring-secondary/10 outline-none transition-all font-medium text-slate-900 dark:text-white placeholder:text-slate-500"
+                            className="w-full p-4 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-2xl focus:bg-white/10 focus:border-secondary/50 focus:ring-4 focus:ring-secondary/10 outline-none transition-all font-medium text-text-primary placeholder:text-muted shadow-inner"
                             placeholder="e.g., Cheap, Stuff, Maybe"
                             value={neverSay}
                             onChange={(e) => setNeverSay(e.target.value)}

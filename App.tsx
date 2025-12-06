@@ -6,6 +6,7 @@ import { CampaignGenerator } from './components/tools/CampaignGenerator';
 import { ImageGenLab } from './components/tools/ImageGenLab';
 import { SeoAnalyzer } from './components/tools/SeoAnalyzer';
 import { BrandVoiceDNA } from './components/tools/BrandVoiceDNA';
+import { AnalyticsLab } from './components/tools/AnalyticsLab';
 import { Workspace } from './components/Workspace';
 import { Profile } from './components/Profile';
 import { Auth } from './components/Auth';
@@ -20,7 +21,7 @@ export type ViewState =
   | { type: 'workspace' }
   | { type: 'profile' }
   | { type: 'course'; courseId: string; moduleId?: string }
-  | { type: 'tool'; toolName: 'campaign' | 'image' | 'seo' | 'brand-voice'; action?: 'openLibrary' };
+  | { type: 'tool'; toolName: 'campaign' | 'image' | 'seo' | 'brand-voice' | 'analytics'; action?: 'openLibrary' };
 
 const App: React.FC = () => {
   const [session, setSession] = useState<Session | null>(null);
@@ -79,7 +80,7 @@ const App: React.FC = () => {
       case 'dashboard':
         return <Dashboard onNavigate={handleNavigate} courses={COURSES} />;
       case 'workspace':
-        return <Workspace />;
+        return <Workspace onNavigate={handleNavigate} />;
       case 'profile':
         return <Profile courses={COURSES} onNavigate={handleNavigate} />;
       case 'course':
@@ -92,6 +93,7 @@ const App: React.FC = () => {
           case 'image': return <ImageGenLab initialAction={currentView.action} />;
           case 'seo': return <SeoAnalyzer />;
           case 'brand-voice': return <BrandVoiceDNA />;
+          case 'analytics': return <AnalyticsLab />;
           default: return <div>Tool not found</div>;
         }
       default:
@@ -126,11 +128,11 @@ const App: React.FC = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
         {/* Mobile Header */}
-        <header className="bg-surface-glass backdrop-blur-xl border-b border-border-light md:hidden flex items-center justify-between p-4 sticky top-0 z-30">
+        <header className="glass-panel border-b border-border-light md:hidden flex items-center justify-between p-4 sticky top-0 z-30">
           <div className="flex items-center">
             <button
               onClick={() => setIsMobileMenuOpen(true)}
-              className="p-2 -ml-2 rounded-full hover:bg-white/10 text-text-primary transition-colors"
+              className="p-2 -ml-2 rounded-full hover:bg-black/5 dark:hover:bg-white/10 text-text-primary transition-colors"
             >
               <Menu size={24} />
             </button>
@@ -141,7 +143,7 @@ const App: React.FC = () => {
           <div className="flex items-center space-x-3">
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-all text-muted hover:text-text-primary"
+              className="p-2 rounded-full bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 border border-transparent dark:border-white/10 transition-all text-muted hover:text-text-primary"
             >
               {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
             </button>

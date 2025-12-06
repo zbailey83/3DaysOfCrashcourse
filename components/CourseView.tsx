@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Course, Module, QuizQuestion } from '../types';
-import { CheckCircle, PlayCircle, FileText, HelpCircle, ChevronRight, AlertCircle, ArrowLeft, ArrowRight, Menu, X, Lock } from 'lucide-react';
+import { CheckCircle, PlayCircle, FileText, HelpCircle, ChevronRight, AlertCircle, ArrowLeft, ArrowRight, Menu, X, Lock, Zap } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { VideoPlayer } from './VideoPlayer';
 import { useProgress } from '../hooks/useProgress';
 import { supabase } from '../lib/supabase';
+import { CampaignGenerator } from './tools/CampaignGenerator';
+import { ImageGenLab } from './tools/ImageGenLab';
+import { SeoAnalyzer } from './tools/SeoAnalyzer';
+import { BrandVoiceDNA } from './tools/BrandVoiceDNA';
+import { AnalyticsLab } from './tools/AnalyticsLab';
 
 const QuizItem = ({ question, index, onCorrect }: { question: QuizQuestion; index: number; onCorrect: () => void }) => {
   const [selected, setSelected] = useState<number | null>(null);
@@ -183,8 +188,8 @@ export const CourseView: React.FC<CourseViewProps> = ({ course, moduleId, onBack
                 key={module.id}
                 onClick={() => setActiveModuleId(module.id)}
                 className={`w-full text-left p-4 rounded-xl text-sm font-medium transition-all flex items-start group ${activeModuleId === module.id
-                  ? 'bg-primary/20 text-text-primary dark:text-white border border-primary/30 shadow-glow scale-[1.02]'
-                  : 'bg-black/5 dark:bg-white/5 border border-transparent text-text-secondary hover:bg-black/10 dark:hover:bg-white/10 hover:border-black/10 dark:hover:border-white/10'
+                  ? 'bg-primary/20 text-text-primary border border-primary/30 shadow-glow scale-[1.02]'
+                  : 'bg-black/5 dark:bg-white/5 border border-transparent text-text-secondary hover:bg-black/10 dark:hover:bg-white/10 hover:border-black/5 dark:hover:border-white/10'
                   }`}
               >
                 <div className={`mt-0.5 w-6 h-6 rounded-full flex items-center justify-center mr-3 text-[10px] font-bold flex-shrink-0 transition-colors ${isCompleted ? 'bg-success text-white' : activeModuleId === module.id ? 'bg-black/20 dark:bg-white/20' : 'bg-black/10 dark:bg-white/10 text-muted group-hover:bg-primary/10 group-hover:text-primary'
@@ -261,6 +266,29 @@ export const CourseView: React.FC<CourseViewProps> = ({ course, moduleId, onBack
                     {activeModule.quiz.map((q, idx) => (
                       <QuizItem key={idx} question={q} index={idx} onCorrect={handleQuizCorrect} />
                     ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Tool Integration */}
+              {activeModule.toolId && (
+                <div className="mt-12 animate-slide-up">
+                  <div className="flex items-center mb-6">
+                    <div className="w-10 h-10 rounded-full bg-violet-500/20 flex items-center justify-center mr-4 text-violet-500">
+                      <Zap size={20} />
+                    </div>
+                    <div>
+                      <h3 className="font-display font-bold text-xl text-text-primary">Interactive Lab</h3>
+                      <p className="text-muted text-sm">Use the tools below to complete this module.</p>
+                    </div>
+                  </div>
+
+                  <div className="border-2 border-dashed border-primary/20 rounded-[24px] p-6 bg-primary/5">
+                    {activeModule.toolId === 'campaign' && <CampaignGenerator />}
+                    {activeModule.toolId === 'image' && <ImageGenLab />}
+                    {activeModule.toolId === 'seo' && <SeoAnalyzer />}
+                    {activeModule.toolId === 'brand-voice' && <BrandVoiceDNA />}
+                    {activeModule.toolId === 'analytics' && <AnalyticsLab />}
                   </div>
                 </div>
               )}

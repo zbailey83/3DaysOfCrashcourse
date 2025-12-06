@@ -14,6 +14,7 @@ interface DashboardProps {
 export const Dashboard: React.FC<DashboardProps> = ({ courses, onNavigate }) => {
   const [userId, setUserId] = useState<string | undefined>(undefined);
   const [userProfile, setUserProfile] = useState<{ full_name: string } | null>(null);
+  const [userCount, setUserCount] = useState(42);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
@@ -24,6 +25,15 @@ export const Dashboard: React.FC<DashboardProps> = ({ courses, onNavigate }) => 
           .then(({ data }) => setUserProfile(data));
       }
     });
+
+    // Fetch user count
+    const fetchUserCount = async () => {
+      const { count } = await supabase.from('profiles').select('*', { count: 'exact', head: true });
+      if (count !== null) {
+        setUserCount(count);
+      }
+    };
+    fetchUserCount();
   }, []);
 
   const { getCourseProgress } = useProgress(userId);
@@ -38,10 +48,12 @@ export const Dashboard: React.FC<DashboardProps> = ({ courses, onNavigate }) => 
         <div className="hidden md:flex -space-x-3 hover:space-x-1 transition-all duration-300">
           {[1, 2, 3].map(i => (
             <div key={i} className="w-10 h-10 rounded-full border-2 border-white/10 bg-white/5 overflow-hidden shadow-sm hover:scale-110 transition-transform z-0 hover:z-10">
-              <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${i}`} alt="peer" />
+              <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${i * 123}`} alt="peer" />
             </div>
           ))}
-          <div className="w-10 h-10 rounded-full border-2 border-white/10 bg-primary/10 flex items-center justify-center text-xs font-bold text-primary shadow-sm">+42</div>
+          <div className="w-10 h-10 rounded-full border-2 border-white/10 bg-primary/10 flex items-center justify-center text-xs font-bold text-primary shadow-sm bg-black/20 backdrop-blur-sm">
+            +{userCount > 3 ? userCount - 3 : 0}
+          </div>
         </div>
       </div>
 
@@ -114,7 +126,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ courses, onNavigate }) => 
               <div className="grid grid-cols-2 gap-3 mt-auto">
                 <button
                   onClick={() => onNavigate({ type: 'tool', toolName: 'campaign' })}
-                  className="flex flex-col items-center p-3 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-primary/10 transition-colors group/btn"
+                  className="flex flex-col items-center p-3 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 border border-transparent dark:border-white/5 transition-all group/btn hover:shadow-glow hover:-translate-y-0.5"
                 >
                   <PenTool size={20} className="mb-2 text-primary group-hover/btn:scale-110 transition-transform" />
                   <span className="text-xs font-bold text-text-primary">Campaign</span>
@@ -122,7 +134,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ courses, onNavigate }) => 
 
                 <button
                   onClick={() => onNavigate({ type: 'tool', toolName: 'image' })}
-                  className="flex flex-col items-center p-3 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-secondary/10 transition-colors group/btn"
+                  className="flex flex-col items-center p-3 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 border border-transparent dark:border-white/5 transition-all group/btn hover:shadow-glow hover:-translate-y-0.5"
                 >
                   <ImageIcon size={20} className="mb-2 text-secondary group-hover/btn:scale-110 transition-transform" />
                   <span className="text-xs font-bold text-text-primary">Visual Lab</span>
@@ -130,7 +142,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ courses, onNavigate }) => 
 
                 <button
                   onClick={() => onNavigate({ type: 'tool', toolName: 'image', action: 'openLibrary' })}
-                  className="flex flex-col items-center p-3 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-violet-500/10 transition-colors group/btn"
+                  className="flex flex-col items-center p-3 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 border border-transparent dark:border-white/5 transition-all group/btn hover:shadow-glow hover:-translate-y-0.5"
                 >
                   <BookOpen size={20} className="mb-2 text-violet-400 group-hover/btn:scale-110 transition-transform" />
                   <span className="text-xs font-bold text-text-primary">Library</span>
@@ -138,10 +150,18 @@ export const Dashboard: React.FC<DashboardProps> = ({ courses, onNavigate }) => 
 
                 <button
                   onClick={() => onNavigate({ type: 'tool', toolName: 'seo' })}
-                  className="flex flex-col items-center p-3 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-emerald-500/10 transition-colors group/btn"
+                  className="flex flex-col items-center p-3 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 border border-transparent dark:border-white/5 transition-all group/btn hover:shadow-glow hover:-translate-y-0.5"
                 >
                   <Search size={20} className="mb-2 text-emerald-400 group-hover/btn:scale-110 transition-transform" />
                   <span className="text-xs font-bold text-text-primary">SEO</span>
+                </button>
+
+                <button
+                  onClick={() => onNavigate({ type: 'tool', toolName: 'analytics' })}
+                  className="flex flex-col items-center p-3 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 border border-transparent dark:border-white/5 transition-all group/btn hover:shadow-glow hover:-translate-y-0.5 col-span-2"
+                >
+                  <Search size={20} className="mb-2 text-pink-400 group-hover/btn:scale-110 transition-transform" />
+                  <span className="text-xs font-bold text-text-primary">Analytics Lab</span>
                 </button>
               </div>
             </div>

@@ -3,7 +3,13 @@ import { useArtifacts } from '../hooks/useArtifacts';
 import { supabase } from '../lib/supabase';
 import { FileText, Image as ImageIcon, Search, Mic, Trash2, ExternalLink, Calendar, Download, Share2 } from 'lucide-react';
 
-export const Workspace: React.FC = () => {
+import { ViewState } from '../App';
+
+interface WorkspaceProps {
+    onNavigate: (view: ViewState) => void;
+}
+
+export const Workspace: React.FC<WorkspaceProps> = ({ onNavigate }) => {
     const [userId, setUserId] = useState<string | undefined>(undefined);
     const [activeTab, setActiveTab] = useState<'all' | 'campaign' | 'image' | 'seo_analysis' | 'brand_voice'>('all');
 
@@ -108,6 +114,23 @@ export const Workspace: React.FC = () => {
                     </button>
                 ))}
             </div>
+
+            {/* Brand Voice CTA if missing */}
+            {activeTab === 'brand_voice' && artifacts.length === 0 && !loading && (
+                <div className="animate-slide-up rounded-[24px] p-8 bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20 text-center">
+                    <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-4 text-pink-400">
+                        <Mic size={32} />
+                    </div>
+                    <h2 className="text-2xl font-bold text-text-primary mb-2">No Brand Voice Found</h2>
+                    <p className="text-muted max-w-md mx-auto mb-6">Defining your Brand Voice DNA is critical for consistent AI generation.</p>
+                    <button
+                        onClick={() => onNavigate({ type: 'tool', toolName: 'brand-voice' })}
+                        className="px-6 py-3 rounded-full font-bold text-white bg-gradient-to-r from-primary to-secondary hover:shadow-glow transition-all">
+                        Configure Now
+                    </button>
+                    <p className="text-xs text-muted mt-4">Go to your Profile to launch the configuration tool.</p>
+                </div>
+            )}
 
             {/* Content Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-slide-up delay-200">
